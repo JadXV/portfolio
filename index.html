@@ -141,7 +141,7 @@
             <div id="window-buttons">
                 <span class="button">-</span>
                 <span style="font-size: 15px;" class="button">□</span>
-                <span style="margin-right: 20px; font-size: 30px;" class="button buttonx">×</span>
+                <span style="margin-right: 20px; font-size: 30px; margin-top: -1px;" class="button buttonx">×</span>
             </div>
         </div>
         <div id="output-container">
@@ -154,14 +154,10 @@
             </div>
         </div>
     </div>
-    <footer style="position: absolute; bottom: 10px; width: 100%; text-align: center; color: rgb(33, 31, 31); font-family: monospace;">
-        made without Guns
-    </footer>
-
     <script>
         commandsran = [];
         const commands = {
-            whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br>find out what I code in by running 'skills'",
+            whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br><br>Find out what I code in by running 'skills'<br>or for aviation run 'aveek'",
             skills: "I'm skilled in:<br>BAT & SH,<br>C#,<br>Rust,<br>Lua,<br>HTML & CSS,<br>TypeScript,<br>JavaScript,<br>Java,<br>and primarly Python",
             avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation<br><br>Run `cls` when planes stop spawning to clear them.",
             github: "<a href='https://github.com/JadXV'><span style='color: #996EE8; text-decoration: underline;'>My GitHub</span></a>",
@@ -186,6 +182,7 @@
 
             plane.style.width = '50px';
             plane.style.height = '50px';
+
             plane.style.borderRadius = '50%';
             terminal.appendChild(plane);
 
@@ -223,29 +220,42 @@
             button.addEventListener('click', function() {
             if (button.innerText === '□') {
                 if (terminal.style.width === '100%' && terminal.style.height === '100%') {
-                terminal.style.width = '80%';
-                terminal.style.height = '80%';
-                terminal.style.left = '10%';
-                terminal.style.top = '10%';
+                    terminal.style.width = '80%';
+                    terminal.style.height = '80%';
+                    terminal.style.left = '10%';
+                    terminal.style.top = '10%';
                 } else {
-                terminal.style.width = '100%';
-                terminal.style.height = '100%';
-                terminal.style.left = '0';
-                terminal.style.top = '0';
+                    terminal.style.width = '100%';
+                    terminal.style.height = '100%';
+                    terminal.style.left = '0';
+                    terminal.style.top = '0';
                 }
                 } else if (button.innerText === '×') {
-                    terminal.remove();
-                    document.body.innerHTML = "<div style='font-family: monospace; color: white; text-align: center; margin-top: 20vh;'>You closed my portfolio, refresh the page if you wish to open it again</div>";
+                    terminal.style.display = 'none';
+                    document.body.innerHTML = "<div style='font-family: monospace; color: white; text-align: center; margin-top: 20vh;'>You closed my portfolio, press anywhere to reopen</div>";
+                    setTimeout(() => {
+                        const reopenListener = function() {
+                            document.body.innerHTML = "";
+                            document.body.appendChild(terminal);
+                            terminal.style.display = 'flex';
+                            document.body.removeEventListener('click', reopenListener);
+                        };
+                        document.body.addEventListener('click', reopenListener);
+                    }, 0);
                 } else if (button.innerText === '-') {
                     if (terminal.style.width === '80%' && terminal.style.height === '80%') {
                         terminal.style.width = '80%';
-                        terminal.style.height = '4%';
+                        terminal.style.height = '4%';   
                     } else {
                         terminal.style.width = '80%';
                         terminal.style.height = '80%';
                     }
                 }
             });
+        });
+
+        terminal.addEventListener('click', function() {
+            input.focus();
         });
 
         input.addEventListener('keydown', function(event) {
@@ -271,10 +281,14 @@
                     if (command === 'cls') {
                         while (outputContainer.children.length > 1) {
                             outputContainer.removeChild(outputContainer.children[0]);
-                            const planes = document.querySelectorAll('.plane');
-
-                            planes.forEach(plane => plane.remove());
                         }
+                        const planes = document.querySelectorAll('.plane');
+
+                        planes.forEach((plane, index) => {
+                            setTimeout(() => {
+                                plane.remove();
+                            }, index * 500);
+                        });
                     } else if (command === 'help') {
                         commandResult.innerHTML = 'Available commands:<br>';
                         for (const key in commands) {
@@ -290,6 +304,15 @@
                     }
                 } else if (command === '') {
                     commandResult.innerHTML = '';
+                } else if (command === 'malek') {
+                    commandResult.innerHTML = "<iframe width='360' height='315' src='https://www.youtube.com/embed/6n3pFFPSlW4?autoplay=1&controls=0' frameborder='0'</iframe>";
+                    const iframe = commandResult.querySelector('iframe');
+                    iframe.addEventListener('mouseover', function() {
+                        iframe.style.pointerEvents = 'none';
+                    });
+                    setTimeout(() => {
+                        commandResult.innerHTML = '';
+                    }, 16000);
                 } else {
                     commandResult.innerHTML = `<span class="error">'${command}' is not recognized as an internal or external command,<br>operable program or batch file.<br><br>Type 'help' to see available commands</span>`;
                 }
@@ -309,6 +332,11 @@
             isDragging = true;
             offsetX = event.clientX - terminal.offsetLeft;
             offsetY = event.clientY - terminal.offsetTop;
+        });
+
+        topbar.addEventListener('dblclick', function() {
+            terminal.style.left = `${(window.innerWidth - terminal.offsetWidth) / 2}px`;
+            terminal.style.top = `${(window.innerHeight - terminal.offsetHeight) / 2}px`;
         });
 
         document.addEventListener('mousemove', function(event) {
