@@ -4,10 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portfolio</title>
+    <link rel="icon" href="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg">
     <style>
         body {
             background-color: black;
-            color: white;
+            color: rgb(255, 255, 255);
             font-family: monospace;
             margin: 0;
             padding: 0;
@@ -15,10 +16,12 @@
             justify-content: center;
             align-items: center;
             height: 100vh;
+            overflow-x: hidden;
+            overflow-y: hidden;
         }
         #terminal {
             background-color: black;
-            border: 1px solid white;
+            border: 2px solid #171515;
             padding: 0;
             width: 80%;
             height: 80%;
@@ -41,8 +44,6 @@
             justify-content: space-between;
             align-items: center;
             cursor: move;
-            border-top-left-radius: 12px;
-            border-top-right-radius: 12px;
             position: sticky; 
             top: 0;
             width: 100%;
@@ -50,14 +51,25 @@
         }
         #window-buttons {
             display: flex;
-            gap: 5px;
+            gap: 15px;
+            font-size: 20px;
+            margin-bottom: -5px;   
         }
         .button {
             color: white;
             padding: 2px 5px;
             cursor: pointer;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 5px;
         }
         .button:hover {
+            background-color: #675d5d;
+        }
+        .buttonx:hover {
             background-color: #ff0000;
         }
         #output-container {
@@ -65,6 +77,7 @@
             flex-direction: column;
             padding: 10px;
             flex-grow: 1;
+            overflow-y: auto;
         }
         .command-line {
             display: flex;
@@ -87,14 +100,7 @@
             outline: none;
         }
         .resize-handle {
-            background-color: #444;
-            width: 15px;
-            height: 15px;
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            cursor: se-resize;
-            border-bottom-right-radius: 12px;
+            display: none; 
         }
         .command-output {
             color: rgb(165, 165, 218);
@@ -108,6 +114,21 @@
             transform: rotate(0deg);
             transition: transform 0.2s linear;
         }
+
+        #output-container::-webkit-scrollbar {
+            width: 8px; 
+        }
+        #output-container::-webkit-scrollbar-track {
+            background: #171515; 
+        }
+        #output-container::-webkit-scrollbar-thumb {
+            background-color: #444; 
+            border-radius: 10px; 
+            border: 2px solid #1e1e1e; 
+        }
+        #output-container::-webkit-scrollbar-thumb:hover {
+            background-color: #555; 
+        }
     </style>
 </head>
 <body>
@@ -119,20 +140,19 @@
             </div>
             <div id="window-buttons">
                 <span class="button">-</span>
-                <span class="button">□</span>
-                <span style="margin-right: 20px;" class="button">×</span>
+                <span style="font-size: 15px;" class="button">□</span>
+                <span style="margin-right: 20px; font-size: 30px;" class="button buttonx">×</span>
             </div>
         </div>
         <div id="output-container">
             <div class="initial-message" style="color: white; font-family: monospace; margin-bottom: 10px;">
-                JadXV's Portfolio [Version 10.0.26100.2605]<br>Type 'help' to start exploring my portfolio
+                JadXV's Portfolio [Version 10.0.26100.2605]<br><span style="color: #ff6c6c;">Type 'help' to see available commands</span>   
             </div>
             <div class="command-line">
                 <span class="prompt">C:\Users\JadXV></span>
                 <input type="text" id="input" autofocus autocomplete="off">
             </div>
         </div>
-        <div class="resize-handle"></div>
     </div>
     <footer style="position: absolute; bottom: 10px; width: 100%; text-align: center; color: rgb(33, 31, 31); font-family: monospace;">
         made without Guns
@@ -144,8 +164,8 @@
             whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br>find out what I code in by running 'skills'",
             skills: "I'm skilled in:<br>BAT & SH,<br>C#,<br>Rust,<br>Lua,<br>HTML & CSS,<br>TypeScript,<br>JavaScript,<br>Java,<br>and primarly Python",
             avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation<br><br>Run `cls` when planes stop spawning to clear them.",
-            github: "<a href='https://github.com/JadXV'>My GitHub</a>",
-            socials: "My Discord: '@JadXV.'<br>Other socials: <a href='https://www.youtube.com/@jadxvx'>My YouTube</a> <a href='https://x.com/JadXvX'>My Twitter</a> <a href='https://www.roblox.com/users/1167933334/profile'>My Roblox</a>",
+            github: "<a href='https://github.com/JadXV'><span style='color: #996EE8; text-decoration: underline;'>My GitHub</span></a>",
+            socials: "<span style='color: #996EE8;'>My Discord: '@JadXV.'</span><br>Other socials: <a href='https://www.youtube.com/@jadxvx'><span style='color: #E4080A; text-decoration: underline;'>YouTube</span></a>, <a href='https://x.com/JadXvX'><span style='color: #1DA1F2; text-decoration: underline;'>Twitter</span></a>, <a href='https://www.roblox.com/users/1167933334/profile'><span style='color: #A9AAA9; text-decoration: underline;'>Roblox</span></a>",
             cls: "Clears the terminal screen",
             help: "Gives a list of available commands",
         };
@@ -160,8 +180,13 @@
             images = ["https://iwant.games/wp-content/uploads/microsoft-flight-simulator-2024-thumb-468x702.jpg", "https://flightsimulator.azureedge.net/wp-content/uploads/2023/06/MSFS_Limitless_v1_NoSnipe_Logo_NoText.png", "https://yt3.ggpht.com/a-/AAuE7mC4dY2trknwadK9lRofX33Iy9dNGlKV9C9wZQ=s900-mo-c-c0xffffffff-rj-k-no", "https://th.bing.com/th/id/OIP.-RWbpLWHg5fnpJVBjIuw3wHaHa?rs=1&pid=ImgDetMain", "https://m.media-amazon.com/images/I/81F0cFEoDCL._AC_SL1500_.jpg"]
             plane.src = images[Math.floor(Math.random() * images.length)];
             plane.classList.add('plane');
+            
             plane.style.top = `${Math.random() * (terminal.offsetHeight - 100)}px`;
             plane.style.left = `${Math.random() * (terminal.offsetWidth - 100)}px`;
+
+            plane.style.width = '50px';
+            plane.style.height = '50px';
+            plane.style.borderRadius = '50%';
             terminal.appendChild(plane);
 
             let directionX = Math.random() > 0.5 ? 1 : -1;
@@ -194,11 +219,47 @@
             movePlane();
         }
 
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', function() {
+            if (button.innerText === '□') {
+                if (terminal.style.width === '100%' && terminal.style.height === '100%') {
+                terminal.style.width = '80%';
+                terminal.style.height = '80%';
+                terminal.style.left = '10%';
+                terminal.style.top = '10%';
+                } else {
+                terminal.style.width = '100%';
+                terminal.style.height = '100%';
+                terminal.style.left = '0';
+                terminal.style.top = '0';
+                }
+                } else if (button.innerText === '×') {
+                    terminal.remove();
+                    document.body.innerHTML = "<div style='font-family: monospace; color: white; text-align: center; margin-top: 20vh;'>You closed my portfolio, refresh the page if you wish to open it again</div>";
+                } else if (button.innerText === '-') {
+                    if (terminal.style.width === '80%' && terminal.style.height === '80%') {
+                        terminal.style.width = '80%';
+                        terminal.style.height = '4%';
+                    } else {
+                        terminal.style.width = '80%';
+                        terminal.style.height = '80%';
+                    }
+                }
+            });
+        });
+
         input.addEventListener('keydown', function(event) {
             if (event.key === 'ArrowUp' && commandsran.length > 0) {
                 event.preventDefault();
                 input.value = commandsran.pop();
-            } if (event.key === 'Enter') {
+            } else if (event.key == 'Tab') {
+                event.preventDefault();
+                const command = input.value;
+                const matchingCommands = Object.keys(commands).filter(c => c.startsWith(command));
+                if (matchingCommands.length === 1) {
+                    input.value = matchingCommands[0];
+                }
+            } else if (event.key === 'Enter') {
                 const command = input.value;
                 const newOutput = document.createElement('div');
                 newOutput.classList.add('command-line');
