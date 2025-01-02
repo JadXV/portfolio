@@ -33,6 +33,10 @@
             box-sizing: border-box;
             overflow: hidden;
             border-radius: 12px;
+            min-width: 25%;
+            min-height: 25%;
+            max-width: 100%; 
+            max-height: 100%;
         }
         #topbar {
             background-color: #171515;
@@ -47,13 +51,15 @@
             position: sticky; 
             top: 0;
             width: 100%;
-            z-index: 1000; 
+            z-index: 1000;
+            user-select: none; 
         }
         #window-buttons {
             display: flex;
             gap: 15px;
             font-size: 20px;
-            margin-bottom: -5px;   
+            margin-bottom: -5px;
+            user-select: none; 
         }
         .button {
             color: white;
@@ -134,11 +140,11 @@
 <body>
     <div id="terminal">
         <div id="topbar">
-            <div style="display: flex; align-items: center;">
+            <div style="display: flex; align-items: center; user-select: none;">
                 <img src="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg" alt="Command Prompt Icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;">
                 Administrator: Command Prompt
             </div>
-            <div id="window-buttons">
+            <div id="window-buttons" style="user-select: none;">
                 <span class="button">-</span>
                 <span style="font-size: 15px;" class="button">□</span>
                 <span style="margin-right: 20px; font-size: 30px; margin-top: -1px;" class="button buttonx">×</span>
@@ -157,11 +163,13 @@
     <script>
         commandsran = [];
         const commands = {
-            whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br><br>Find out what I code in by running 'skills'<br>or for aviation run 'aveek'",
-            skills: "I'm skilled in:<br>BAT & SH,<br>C#,<br>Rust,<br>Lua,<br>HTML & CSS,<br>TypeScript,<br>JavaScript,<br>Java,<br>and primarly Python",
-            avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation<br><br>Run `cls` when planes stop spawning to clear them.",
+            whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br><br>Find out what I code in by running <span style='color: #9101BA;'>'skills'</span><br>or for aviation run <span style='color: #9101BA;'>'aveek'</span>",
+            skills: "I'm skilled in:<br><span style='color: #FF7043;'>BAT & SH</span>,<br><span style='color: #1E90FF;'>C#</span>,<br><span style='color: #FF6347;'>Rust</span>,<br><span style='color: #5F9EA0;'>Lua</span>,<br><span style='color: #F5F5F5;'>HTML & CSS</span>,<br><span style='color: #B0E0E6;'>TypeScript</span>,<br><span style='color: #FF8C00;'>JavaScript</span>,<br><span style='color: #FF8C69;'>Java</span>,<br>& primarly <span style='color: #FFFF33;'>Python</span>",
+            avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation<br><br>Run <span style='color: #9101BA;'>`cls`</span> when sims stop spawning to clear them.",
             github: "<a href='https://github.com/JadXV'><span style='color: #996EE8; text-decoration: underline;'>My GitHub</span></a>",
             socials: "<span style='color: #996EE8;'>My Discord: '@JadXV.'</span><br>Other socials: <a href='https://www.youtube.com/@jadxvx'><span style='color: #E4080A; text-decoration: underline;'>YouTube</span></a>, <a href='https://x.com/JadXvX'><span style='color: #1DA1F2; text-decoration: underline;'>Twitter</span></a>, <a href='https://www.roblox.com/users/1167933334/profile'><span style='color: #A9AAA9; text-decoration: underline;'>Roblox</span></a>",
+            achievements: "<span style='color: #FFECA1;'>1st place winner</span> of the <span style='color: #9101BA;'>StackHacks</span> hackathon,<br>I also participated in many other hackathons and coding competitions.<br>view my GitHub for more info by running <span style='color: #9101BA;'>'github'</span>",
+            projects: "I have many projects that I am working towards open sourcing, keep an eye on my GitHub for updates",
             cls: "Clears the terminal screen",
             help: "Gives a list of available commands",
         };
@@ -218,21 +226,21 @@
 
         document.querySelectorAll('.button').forEach(button => {
             button.addEventListener('click', function() {
-            if (button.innerText === '□') {
-                if (terminal.style.width === '100%' && terminal.style.height === '100%') {
-                    terminal.style.width = '80%';
-                    terminal.style.height = '80%';
-                    terminal.style.left = '10%';
-                    terminal.style.top = '10%';
+                if (button.innerText === '□') {
+                    if (terminal.style.width === '100%' && terminal.style.height === '100%') {
+                        terminal.style.width = '80%';
+                        terminal.style.height = '80%';
+                        terminal.style.left = '10%';
+                        terminal.style.top = '10%';
+                    } else {
+                        terminal.style.width = '100%';
+                        terminal.style.height = '100%';
+                        terminal.style.left = '0';
+                        terminal.style.top = '0';
+                    }
                 } else {
-                    terminal.style.width = '100%';
-                    terminal.style.height = '100%';
-                    terminal.style.left = '0';
-                    terminal.style.top = '0';
-                }
-                } else if (button.innerText === '×') {
                     terminal.style.display = 'none';
-                    document.body.innerHTML = "<div style='font-family: monospace; color: white; text-align: center; margin-top: 20vh;'>You closed my portfolio, press anywhere to reopen</div>";
+                    document.body.innerHTML = "<div style='font-family: monospace; color: white; text-align: center; margin-top: 20vh;'>You've closed/minimized my portfolio, press anywhere to reopen</div>";
                     setTimeout(() => {
                         const reopenListener = function() {
                             document.body.innerHTML = "";
@@ -242,14 +250,6 @@
                         };
                         document.body.addEventListener('click', reopenListener);
                     }, 0);
-                } else if (button.innerText === '-') {
-                    if (terminal.style.width === '80%' && terminal.style.height === '80%') {
-                        terminal.style.width = '80%';
-                        terminal.style.height = '4%';   
-                    } else {
-                        terminal.style.width = '80%';
-                        terminal.style.height = '80%';
-                    }
                 }
             });
         });
@@ -291,13 +291,15 @@
                         });
                     } else if (command === 'help') {
                         commandResult.innerHTML = 'Available commands:<br>';
+                        const colors = ['#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300'];
                         for (const key in commands) {
-                            commandResult.innerHTML += `${key}<br>`;
+                            const randomColor = colors[Math.floor(Math.random() * colors.length)];
+                            commandResult.innerHTML += `<span style="color: ${randomColor};">${key}</span><br>`;
                         }
                     } else if (command === 'avgeek') {
                         commandResult.innerHTML = commands[command];
                         for (let i = 0; i < 10; i++) {
-                            setTimeout(spawnPlane, i * 1000);
+                            setTimeout(spawnPlane, i * 500);
                         }
                     } else {
                         commandResult.innerHTML = commands[command];
@@ -342,8 +344,15 @@
 
         document.addEventListener('mousemove', function(event) {
             if (isDragging) {
-                terminal.style.left = `${event.clientX - offsetX}px`;
-                terminal.style.top = `${event.clientY - offsetY}px`;
+                let newLeft = event.clientX - offsetX;
+                let newTop = event.clientY - offsetY;
+
+                // Ensure the terminal stays within the viewport
+                newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - terminal.offsetWidth));
+                newTop = Math.max(0, Math.min(newTop, window.innerHeight - terminal.offsetHeight));
+
+                terminal.style.left = `${newLeft}px`;
+                terminal.style.top = `${newTop}px`;
             }
         });
 
@@ -364,8 +373,15 @@
                 if (isResizing) {
                     const dx = event.clientX - startX;
                     const dy = event.clientY - startY;
-                    terminal.style.width = `${startWidth + dx}px`;
-                    terminal.style.height = `${startHeight + dy}px`;
+                    let newWidth = startWidth + dx;
+                    let newHeight = startHeight + dy;
+
+                    // Ensure the terminal stays within the viewport
+                    newWidth = Math.min(newWidth, window.innerWidth - terminal.offsetLeft);
+                    newHeight = Math.min(newHeight, window.innerHeight - terminal.offsetTop);
+
+                    terminal.style.width = `${newWidth}px`;
+                    terminal.style.height = `${newHeight}px`;
                 }
             }
 
