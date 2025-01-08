@@ -172,6 +172,7 @@
             projects: "I have many projects that I am working towards open sourcing, keep an eye on my GitHub for updates",
             cls: "Clears the terminal screen",
             help: "Gives a list of available commands",
+            back: "Go back to the option picker",
         };
 
         const input = document.getElementById('input');
@@ -296,6 +297,8 @@
                             const randomColor = colors[Math.floor(Math.random() * colors.length)];
                             commandResult.innerHTML += `<span style="color: ${randomColor};">${key}</span><br>`;
                         }
+                    } else if (command === 'back') {
+                        window.location.href = '/index.html';
                     } else if (command === 'avgeek') {
                         commandResult.innerHTML = commands[command];
                         for (let i = 0; i < 10; i++) {
