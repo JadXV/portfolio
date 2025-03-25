@@ -217,19 +217,20 @@
                 input.value = commandsran.pop();
             } else if (event.key == 'Tab') {
                 event.preventDefault();
-                const command = input.value;
+                const command = input.value.toLowerCase();
                 const matchingCommands = Object.keys(commands).filter(c => c.startsWith(command));
                 if (matchingCommands.length === 1) {
                     input.value = matchingCommands[0];
                 }
             } else if (event.key === 'Enter') {
-                const command = input.value;
+                const commandInput = input.value;
+                const command = commandInput.toLowerCase(); 
                 const newOutput = document.createElement('div');
                 newOutput.classList.add('command-line');
-                newOutput.innerHTML = `<span class="prompt">C:\\Users\\JadXV></span> ${command}`;
+                newOutput.innerHTML = `<span class="prompt">C:\\Users\\JadXV></span> ${commandInput}`;
                 const commandResult = document.createElement('div');
                 commandResult.classList.add('command-output');
-                commandsran.push(command); 
+                commandsran.push(commandInput);
                 if (commands[command]) {
                     if (command === 'cls') {
                         while (outputContainer.children.length > 1) {
@@ -256,7 +257,7 @@
                     }
                 } else if (command === '') {
                     commandResult.innerHTML = '';
-                } else if (command === 'malek' || command === 'pee') {
+                } else if (command === 'malek') {
                     // for ppl reading src, this is an easter egg for one of my friends (inside joke)
                     commandResult.innerHTML = "<iframe width='360' height='315' src='https://www.youtube.com/embed/6n3pFFPSlW4?autoplay=1&controls=0' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>";
                     const iframe = commandResult.querySelector('iframe');
@@ -267,7 +268,7 @@
                         commandResult.innerHTML = '';
                     }, 16000);
                 } else {
-                    commandResult.innerHTML = `<span class="error">'${command}' is not recognized as an internal or external command,<br>operable program or batch file.<br><br>Type 'help' to see available commands</span>`;
+                    commandResult.innerHTML = `<span class="error">'${commandInput}' is not recognized as an internal or external command,<br>operable program or batch file.<br><br>Type 'help' to see available commands</span>`;
                 }
                 outputContainer.insertBefore(newOutput, input.parentElement);
                 outputContainer.insertBefore(commandResult, input.parentElement);
