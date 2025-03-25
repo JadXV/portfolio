@@ -257,7 +257,7 @@
                 } else if (command === '') {
                     commandResult.innerHTML = '';
                 } else if (command === 'malek') {
-                    // for ppl reaeding src, this is an easter egg
+                    // for ppl reading src, this is an easter egg for one of my friends (inside joke)
                     commandResult.innerHTML = "<iframe width='360' height='315' src='https://www.youtube.com/embed/6n3pFFPSlW4?autoplay=1&controls=0' frameborder='0' allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture' allowfullscreen></iframe>";
                     const iframe = commandResult.querySelector('iframe');
                     iframe.addEventListener('mouseover', function() {
@@ -297,7 +297,6 @@
                 let newLeft = event.clientX - offsetX;
                 let newTop = event.clientY - offsetY;
 
-                // Ensure the terminal stays within the viewport
                 newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - terminal.offsetWidth));
                 newTop = Math.max(0, Math.min(newTop, window.innerHeight - terminal.offsetHeight));
 
@@ -326,7 +325,6 @@
                     let newWidth = startWidth + dx;
                     let newHeight = startHeight + dy;
 
-                    // Ensure the terminal stays within the viewport
                     newWidth = Math.min(newWidth, window.innerWidth - terminal.offsetLeft);
                     newHeight = Math.min(newHeight, window.innerHeight - terminal.offsetTop);
 
