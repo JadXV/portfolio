@@ -116,10 +116,7 @@
             color: red;
         }
         img.plane {
-            position: absolute;
-            width: 100px;
-            transform: rotate(0deg);
-            transition: transform 0.2s linear;
+            display: none; /* Hide plane elements instead of removing the class entirely */
         }
 
         #output-container::-webkit-scrollbar {
@@ -166,7 +163,7 @@
         const commands = {
             whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br><br>Find out what I code in by running <span style='color: #9101BA;'>'skills'</span><br>or for aviation run <span style='color: #9101BA;'>'aveek'</span>",
             skills: "I'm skilled in:<br><span style='color: #FF7043;'>BAT & SH</span>,<br><span style='color: #1E90FF;'>C#</span>,<br><span style='color: #FF6347;'>Rust</span>,<br><span style='color: #5F9EA0;'>Lua</span>,<br><span style='color: #F5F5F5;'>HTML & CSS</span>,<br><span style='color: #B0E0E6;'>TypeScript</span>,<br><span style='color: #FF8C00;'>JavaScript</span>,<br><span style='color: #FF8C69;'>Java</span>,<br>& primarly <span style='color: #FFFF33;'>Python</span>",
-            avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation<br><br>Run <span style='color: #9101BA;'>`cls`</span> when sims stop spawning to clear them.",
+            avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation",
             github: "<a href='https://github.com/JadXV'><span style='color: #996EE8; text-decoration: underline;'>My GitHub</span></a>",
             socials: "<span style='color: #996EE8;'>My Discord: '@JadXV.' <- with the dot in the handle</span><br>Other socials: <a href='https://www.youtube.com/@jadxvx'><span style='color: #E4080A; text-decoration: underline;'>YouTube</span></a>, <a href='https://x.com/JadXvX'><span style='color: #1DA1F2; text-decoration: underline;'>Twitter</span></a>, <a href='https://www.roblox.com/users/1167933334/profile'><span style='color: #A9AAA9; text-decoration: underline;'>Roblox</span></a>",
             achievements: "<span style='color: #FFECA1;'>1st place winner</span> of the <span style='color: #9101BA;'>StackHacks</span> hackathon,<br>I also participated in many other hackathons and coding competitions.<br>view my GitHub for more info by running <span style='color: #9101BA;'>'github'</span>",
@@ -179,51 +176,6 @@
         const outputContainer = document.getElementById('output-container');
         const terminal = document.getElementById('terminal');
         const resizeHandle = document.querySelector('.resize-handle');
-
-        function spawnPlane() {
-            const plane = document.createElement('img');
-            images = ["https://iwant.games/wp-content/uploads/microsoft-flight-simulator-2024-thumb-468x702.jpg", "https://flightsimulator.azureedge.net/wp-content/uploads/2023/06/MSFS_Limitless_v1_NoSnipe_Logo_NoText.png", "https://yt3.ggpht.com/a-/AAuE7mC4dY2trknwadK9lRofX33Iy9dNGlKV9C9wZQ=s900-mo-c-c0xffffffff-rj-k-no", "https://th.bing.com/th/id/OIP.-RWbpLWHg5fnpJVBjIuw3wHaHa?rs=1&pid=ImgDetMain", "https://m.media-amazon.com/images/I/81F0cFEoDCL._AC_SL1500_.jpg"]
-            plane.src = images[Math.floor(Math.random() * images.length)];
-            plane.classList.add('plane');
-            
-            plane.style.top = `${Math.random() * (terminal.offsetHeight - 100)}px`;
-            plane.style.left = `${Math.random() * (terminal.offsetWidth - 100)}px`;
-
-            plane.style.width = '50px';
-            plane.style.height = '50px';
-
-            plane.style.borderRadius = '50%';
-            terminal.appendChild(plane);
-
-            let directionX = Math.random() > 0.5 ? 1 : -1;
-            let directionY = Math.random() > 0.5 ? 1 : -1;
-            let angle = 0;
-
-            function movePlane() {
-                let currentTop = parseFloat(plane.style.top);
-                let currentLeft = parseFloat(plane.style.left);
-
-                currentTop += directionY * 2;
-                currentLeft += directionX * 2;
-
-                if (currentTop <= 0 || currentTop >= terminal.offsetHeight - 100) {
-                    directionY *= -1;
-                }
-                if (currentLeft <= 0 || currentLeft >= terminal.offsetWidth - 100) {
-                    directionX *= -1;
-                }
-
-                plane.style.top = `${currentTop}px`;
-                plane.style.left = `${currentLeft}px`;
-
-                angle = Math.atan2(directionY, directionX) * (180 / Math.PI);
-                plane.style.transform = `rotate(${angle + 90}deg)`;
-
-                requestAnimationFrame(movePlane);
-            }
-
-            movePlane();
-        }
 
         document.querySelectorAll('.button').forEach(button => {
             button.addEventListener('click', function() {
@@ -299,9 +251,6 @@
                         }
                     } else if (command === 'avgeek') {
                         commandResult.innerHTML = commands[command];
-                        for (let i = 0; i < 10; i++) {
-                            setTimeout(spawnPlane, i * 500);
-                        }
                     } else {
                         commandResult.innerHTML = commands[command];
                     }
