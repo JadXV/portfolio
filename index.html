@@ -115,9 +115,6 @@
         .command-output .error {
             color: red;
         }
-        img.plane {
-            display: none; /* Hide plane elements instead of removing the class entirely */
-        }
 
         #output-container::-webkit-scrollbar {
             width: 8px; 
@@ -132,6 +129,60 @@
         }
         #output-container::-webkit-scrollbar-thumb:hover {
             background-color: #555; 
+        }
+
+        .modern-link {
+            color: #6c5ce7;
+            background-color: rgba(108, 92, 231, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            display: inline-block;
+            margin: 2px 0;
+        }
+        
+        .modern-link:hover {
+            background-color: rgba(108, 92, 231, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .modern-link.youtube {
+            color: #ff0000;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        
+        .modern-link.youtube:hover {
+            background-color: rgba(255, 0, 0, 0.2);
+        }
+        
+        .modern-link.twitter {
+            color: #1DA1F2;
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+        
+        .modern-link.twitter:hover {
+            background-color: rgba(29, 161, 242, 0.2);
+        }
+        
+        .modern-link.roblox {
+            color: #00A2FF;
+            background-color: rgba(0, 162, 255, 0.1);
+        }
+        
+        .modern-link.roblox:hover {
+            background-color: rgba(0, 162, 255, 0.2);
+        }
+        
+        .modern-link.gunslol {
+            color: #FF5733;
+            background-color: rgba(255, 87, 51, 0.1);
+        }
+        
+        .modern-link.gunslol:hover {
+            background-color: rgba(255, 87, 51, 0.2);
         }
     </style>
 </head>
@@ -164,8 +215,8 @@
             whoami: "My name is Jad, I go by the alias JadXV. I'm an AvGeek and programmer in various languages,<br><br>Find out what I code in by running <span style='color: #9101BA;'>'skills'</span><br>or for aviation run <span style='color: #9101BA;'>'aveek'</span>",
             skills: "I'm skilled in:<br><span style='color: #FF7043;'>BAT & SH</span>,<br><span style='color: #1E90FF;'>C#</span>,<br><span style='color: #FF6347;'>Rust</span>,<br><span style='color: #5F9EA0;'>Lua</span>,<br><span style='color: #F5F5F5;'>HTML & CSS</span>,<br><span style='color: #B0E0E6;'>TypeScript</span>,<br><span style='color: #FF8C00;'>JavaScript</span>,<br><span style='color: #FF8C69;'>Java</span>,<br>& primarly <span style='color: #FFFF33;'>Python</span>",
             avgeek: "I'm an AvGeek, I love planes and aviation in general. I'm also a flight sim enthusiast,<br>I fly on many sims and have great knowledge of aircraft and aviation",
-            github: "Keep in mind that 98% of my projects are private, but I'm working towards open sourcing them:<br><a href='https://github.com/JadXV'><span style='color: #996EE8; text-decoration: underline;'>My GitHub</span></a>",
-            socials: "<span style='color: #996EE8;'>My Discord: '@JadXV.' <- with the dot in the handle</span><br>Other socials: <a href='https://www.youtube.com/@jadxvx'><span style='color: #E4080A; text-decoration: underline;'>YouTube</span></a>, <a href='https://x.com/JadXvX'><span style='color: #1DA1F2; text-decoration: underline;'>Twitter</span></a>, <a href='https://www.roblox.com/users/1167933334/profile'><span style='color: #A9AAA9; text-decoration: underline;'>Roblox</span></a>",
+            github: "Keep in mind that 98% of my projects are private, but I'm working towards open sourcing them:<br><a href='https://github.com/JadXV' target='_blank' class='modern-link'>My GitHub</a>",
+            socials: "<span style='color: #996EE8;'>My Discord: '@JadXV.' <- with the dot in the handle</span><br>Other socials: <a href='https://www.youtube.com/@jadxvx' target='_blank' class='modern-link youtube'>YouTube</a>, <a href='https://x.com/JadXvX' target='_blank' class='modern-link twitter'>Twitter</a>, <a href='https://www.roblox.com/users/1167933334/profile' target='_blank' class='modern-link roblox'>Roblox</a>",
             achievements: "<span style='color: #FFECA1;'>1st place winner</span> of the <span style='color: #9101BA;'>StackHacks</span> hackathon,<br>I also participated in many other hackathons and coding competitions.<br>view my GitHub for more info by running <span style='color: #9101BA;'>'github'</span>",
             projects: "I have many projects that I am working towards open sourcing, keep an eye on my GitHub for updates",
             cls: "Clears the terminal screen",
@@ -236,13 +287,6 @@
                         while (outputContainer.children.length > 1) {
                             outputContainer.removeChild(outputContainer.children[0]);
                         }
-                        const planes = document.querySelectorAll('.plane');
-
-                        planes.forEach((plane, index) => {
-                            setTimeout(() => {
-                                plane.remove();
-                            }, index * 500);
-                        });
                     } else if (command === 'help') {
                         commandResult.innerHTML = 'Available commands:<br>';
                         const colors = ['#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300', '#FF5733', '#FF8D1A', '#FFC300'];
