@@ -37,6 +37,24 @@
             min-height: 25%;
             max-width: 100%; 
             max-height: 100%;
+            transition: all 0.3s ease-in-out;
+            transform-origin: center;
+            top: 10%;
+            left: 10%;
+        }
+        #terminal.minimized {
+            transform: scale(0.1);
+            opacity: 0;
+            top: 100%;
+            left: 50%;
+            pointer-events: none;
+        }
+        #terminal.maximized {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            border-radius: 0;
         }
         #topbar {
             background-color: #171515;
@@ -53,6 +71,9 @@
             width: 100%;
             z-index: 1000;
             user-select: none; 
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         #window-buttons {
             display: flex;
@@ -60,6 +81,9 @@
             font-size: 20px;
             margin-bottom: -5px;
             user-select: none; 
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .button {
             color: white;
@@ -71,6 +95,10 @@
             justify-content: center;
             align-items: center;
             margin-bottom: 5px;
+            user-select: none; 
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
         }
         .button:hover {
             background-color: #675d5d;
@@ -189,11 +217,11 @@
 <body>
     <div id="terminal">
         <div id="topbar">
-            <div style="display: flex; align-items: center; user-select: none;">
+            <div style="display: flex; align-items: center; user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
                 <img src="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg" alt="Command Prompt Icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;">
                 Administrator: Command Prompt
             </div>
-            <div id="window-buttons" style="user-select: none;">
+            <div id="window-buttons" style="user-select: none; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none;">
                 <span class="button">-</span>
                 <span style="font-size: 15px;" class="button">□</span>
                 <span style="margin-right: 20px; font-size: 20px;" class="button buttonx">×</span>
@@ -227,34 +255,67 @@
         const outputContainer = document.getElementById('output-container');
         const terminal = document.getElementById('terminal');
         const resizeHandle = document.querySelector('.resize-handle');
+        
+        let originalDimensions = {
+            width: '80%',
+            height: '80%',
+            left: '10%',
+            top: '10%'
+        };
 
         document.querySelectorAll('.button').forEach(button => {
             button.addEventListener('click', function() {
                 if (button.innerText === '□') {
-                    if (terminal.style.width === '100%' && terminal.style.height === '100%') {
-                        terminal.style.width = '80%';
-                        terminal.style.height = '80%';
-                        terminal.style.left = '10%';
-                        terminal.style.top = '10%';
+                    if (terminal.classList.contains('maximized')) {
+                        terminal.classList.remove('maximized');
+                        terminal.style.width = originalDimensions.width;
+                        terminal.style.height = originalDimensions.height;
+                        terminal.style.left = originalDimensions.left;
+                        terminal.style.top = originalDimensions.top;
                     } else {
+                        originalDimensions = {
+                            width: terminal.style.width || '80%',
+                            height: terminal.style.height || '80%',
+                            left: terminal.style.left || '10%',
+                            top: terminal.style.top || '10%'
+                        };
+                        terminal.classList.add('maximized');
                         terminal.style.width = '100%';
                         terminal.style.height = '100%';
                         terminal.style.left = '0';
                         terminal.style.top = '0';
                     }
-                } else {
-                    terminal.style.display = 'none';
-                    document.body.innerHTML = "<div style='font-family: monospace; color: white; text-align: center; margin-top: 20vh;'>You've closed/minimized my portfolio, press anywhere to reopen</div>";
+                } else if (button.innerText === '-' || button.innerText === '×') {
+                    terminal.classList.add('minimized');
+                    
                     setTimeout(() => {
-                        const reopenListener = function() {
-                            document.body.innerHTML = "";
-                            document.body.appendChild(terminal);
-                            terminal.style.display = 'flex';
-                            document.body.removeEventListener('click', reopenListener);
-                        };
-                        document.body.addEventListener('click', reopenListener);
-                    }, 0);
-                }
+                        terminal.style.display = 'none';
+                        if (!document.getElementById('reopen-message')) {
+                            const reopenDiv = document.createElement('div');
+                            reopenDiv.id = 'reopen-message';
+                            reopenDiv.style = 'font-family: monospace; color: white; text-align: center; margin-top: 20vh; cursor: pointer;';
+                            reopenDiv.innerHTML = "You've closed/minimized my portfolio, press anywhere to reopen";
+                            document.body.appendChild(reopenDiv);
+                            
+                            const reopenListener = function() {
+                                const reopenMessage = document.getElementById('reopen-message');
+                                if (reopenMessage) {
+                                    reopenMessage.remove();
+                                }
+                                
+                                terminal.style.display = 'flex';
+                                setTimeout(() => {
+                                    terminal.classList.remove('minimized');
+                                    input.focus(); 
+                                }, 10);
+                                
+                                document.body.removeEventListener('click', reopenListener);
+                            };
+                            
+                            document.body.addEventListener('click', reopenListener);
+                        }
+                    }, 300); 
+                } 
             });
         });
 
@@ -326,32 +387,86 @@
         let isDragging = false;
         let offsetX, offsetY;
 
-        topbar.addEventListener('mousedown', function(event) {
-            isDragging = true;
-            offsetX = event.clientX - terminal.offsetLeft;
-            offsetY = event.clientY - terminal.offsetTop;
-        });
-
-        topbar.addEventListener('dblclick', function() {
-            terminal.style.left = `${(window.innerWidth - terminal.offsetWidth) / 2}px`;
-            terminal.style.top = `${(window.innerHeight - terminal.offsetHeight) / 2}px`;
-        });
-
-        document.addEventListener('mousemove', function(event) {
-            if (isDragging) {
-                let newLeft = event.clientX - offsetX;
-                let newTop = event.clientY - offsetY;
-
-                newLeft = Math.max(0, Math.min(newLeft, window.innerWidth - terminal.offsetWidth));
-                newTop = Math.max(0, Math.min(newTop, window.innerHeight - terminal.offsetHeight));
-
-                terminal.style.left = `${newLeft}px`;
-                terminal.style.top = `${newTop}px`;
+        window.addEventListener('load', () => {
+            if (!terminal.style.left) {
+                terminal.style.left = '10%';
+            }
+            if (!terminal.style.top) {
+                terminal.style.top = '10%';
             }
         });
 
+        topbar.addEventListener('mousedown', function(event) {
+            if (event.button !== 0) return;
+            
+            event.preventDefault();
+            
+            isDragging = true;
+            
+            const terminalRect = terminal.getBoundingClientRect();
+            offsetX = event.clientX - terminalRect.left;
+            offsetY = event.clientY - terminalRect.top;
+            
+            terminal.classList.add('dragging');
+        });
+
+        topbar.addEventListener('dblclick', function() {
+            if (terminal.classList.contains('maximized')) {
+                return;
+            }
+            
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const terminalRect = terminal.getBoundingClientRect();
+            
+            const newLeft = (windowWidth - terminalRect.width) / 2;
+            const newTop = (windowHeight - terminalRect.height) / 2;
+            
+            terminal.style.transition = 'all 0.3s ease-out';
+            terminal.style.left = `${newLeft}px`;
+            terminal.style.top = `${newTop}px`;
+            
+            setTimeout(() => {
+                terminal.style.transition = 'all 0.3s ease-in-out';
+            }, 300);
+        });
+
+        document.addEventListener('mousemove', function(event) {
+            if (!isDragging) return;
+            
+            if (terminal.classList.contains('maximized')) return;
+            
+            let newLeft = event.clientX - offsetX;
+            let newTop = event.clientY - offsetY;
+            
+            const terminalRect = terminal.getBoundingClientRect();
+            const terminalWidth = terminalRect.width;
+            const terminalHeight = terminalRect.height;
+            
+            const minVisible = 50; 
+            
+            newLeft = Math.max(-terminalWidth + minVisible, Math.min(newLeft, window.innerWidth - minVisible));
+            newTop = Math.max(0, Math.min(newTop, window.innerHeight - minVisible));
+            
+            terminal.style.transition = 'none';
+            terminal.style.left = `${newLeft}px`;
+            terminal.style.top = `${newTop}px`;
+        });
+
         document.addEventListener('mouseup', function() {
-            isDragging = false;
+            if (isDragging) {
+                isDragging = false;
+                terminal.classList.remove('dragging');
+                terminal.style.transition = 'all 0.3s ease-in-out';
+            }
+        });
+
+        document.addEventListener('mouseleave', function() {
+            if (isDragging) {
+                isDragging = false;
+                terminal.classList.remove('dragging');
+                terminal.style.transition = 'all 0.3s ease-in-out';
+            }
         });
 
         let isResizing = false;
