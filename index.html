@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio</title>
+    <link rel="icon" href="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg">
+    <style>
+        body {
+            background: linear-gradient(135deg, 
+                #0a0a0a 0%, 
+                #1a1a2e 25%, 
+                #16213e 50%, 
+                #0f3460 75%, 
+                #1a1a2e 100%);
+            background-attachment: fixed;
+            background-size: cover;
+            position: relative;
+            color: #fff;
+            font-family: monospace;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(30,60,114,0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(10,10,10,0.3) 0%, transparent 50%),
+                radial-gradient(ellipse at 20% 70%, rgba(26,26,46,0.2) 0%, transparent 40%);
+            pointer-events: none;
+        }
+        #terminal {
+            background-color: black;
+            border: 2px solid #171515;
+            padding: 0;
+            width: 80%;
+            height: 80%;
+            display: flex;
+            flex-direction: column;
+            position: absolute;
+            resize: none; 
+            box-sizing: border-box;
+            overflow: hidden;
+            border-radius: 10px;
+            min-width: 25%;
+            min-height: 25%;
+            max-width: 100%; 
+            max-height: 100%;
+            transition: all 0.3s ease-in-out;
+            transform-origin: center;
+            top: 10%;
+            left: 10%;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+        #terminal.minimized {
+            transform: scale(0.1);
+            opacity: 0;
+            top: 100%;
+            left: 50%;
+            pointer-events: none;
+        }
+        #terminal.maximized {
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            border-radius: 0;
+        }
+        #topbar {
+            background-color: #171515;
+            color: white;
+            padding: 0 10px;
+            font-family: monospace;
+            text-align: left;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: move;
+            position: sticky; 
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            user-select: none;
+            height: 32px;
+            border-top-left-radius: 8px;
+            border-top-right-radius: 8px;
+        }
+        #window-buttons {
+            display: flex;
+            gap: 0;
+            font-size: 20px;
+            user-select: none;
+            height: 100%;
+            padding-right: 10px;
+        }
+        .button {
+            color: white;
+            padding: 0 15px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            user-select: none;
+            margin: 0;
+        }
+        .button:hover { background-color: #675d5d; }
+        .buttonx:hover { background-color: #ff0000; }
+        #output-container {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        .command-line {
+            display: flex;
+            align-items: center;
+        }
+        .prompt { margin-right: 5px; }
+        #input {
+            font-family: monospace;
+            width: 100%;
+            border: none;
+            background: none;
+            color: white;
+            outline: none;
+            flex-grow: 1;
+            padding: 0;
+            font-size: inherit;
+        }
+        .resize-handle {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 15px;
+            height: 15px;
+            cursor: nwse-resize;
+            background: linear-gradient(135deg, transparent 70%, #444 70%, #444 100%);
+            border-bottom-right-radius: 8px;
+        }
+        .command-output { color: rgb(165, 165, 218); }
+        .command-output .error { color: red; }
+        #output-container::-webkit-scrollbar {
+            width: 8px;
+        }
+        #output-container::-webkit-scrollbar-track {
+            background: #171515;
+        }
+        #output-container::-webkit-scrollbar-thumb {
+            background-color: #444;
+            border-radius: 0;
+            border: 2px solid #1e1e1e;
+        }
+        #output-container::-webkit-scrollbar-thumb:hover {
+            background-color: #555;
+        }
+        .modern-link {
+            color: #6c5ce7;
+            background-color: rgba(108, 92, 231, 0.1);
+            padding: 2px 8px;
+            border-radius: 0;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            font-weight: bold;
+            display: inline-block;
+            margin: 2px 0;
+        }
+        .modern-link:hover {
+            background-color: rgba(108, 92, 231, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        .modern-link.youtube {
+            color: #ff0000;
+            background-color: rgba(255, 0, 0, 0.1);
+        }
+        .modern-link.youtube:hover {
+            background-color: rgba(255, 0, 0, 0.2);
+        }
+        .modern-link.twitter {
+            color: #1DA1F2;
+            background-color: rgba(29, 161, 242, 0.1);
+        }
+        .modern-link.twitter:hover {
+            background-color: rgba(29, 161, 242, 0.2);
+        }
+        .modern-link.roblox {
+            color: #00A2FF;
+            background-color: rgba(0, 162, 255, 0.1);
+        }
+        .modern-link.roblox:hover {
+            background-color: rgba(0, 162, 255, 0.2);
+        }
+        .modern-link.gunslol {
+            color: #FF5733;
+            background-color: rgba(255, 87, 51, 0.1);
+        }
+        .modern-link.gunslol:hover {
+            background-color: rgba(255, 87, 51, 0.2);
+        }
+        .user-select-none {
+            user-select: none;
+            -webkit-user-select: none; 
+            -moz-user-select: none; 
+            -ms-user-select: none;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+                box-sizing: border-box;
+            }
+            
+            #terminal {
+                width: 95% !important;
+                height: 90% !important;
+                left: 2.5% !important;
+                top: 5% !important;
+                min-width: 95%;
+                min-height: 90%;
+                font-size: 14px;
+            }
+            
+            #terminal.maximized {
+                width: 100% !important;
+                height: 100% !important;
+                left: 0 !important;
+                top: 0 !important;
+            }
+            
+            #topbar {
+                height: 40px;
+                padding: 0 8px;
+                font-size: 12px;
+            }
+            
+            #window-buttons {
+                gap: 5px;
+                padding-right: 8px;
+            }
+            
+            .button {
+                padding: 0 12px;
+                font-size: 18px;
+            }
+            
+            #output-container {
+                padding: 8px;
+                font-size: 13px;
+                line-height: 1.4;
+            }
+            
+            #input {
+                font-size: 13px;
+            }
+            
+            .resize-handle {
+                display: none;
+            }
+            
+            .modern-link {
+                display: block;
+                margin: 4px 0;
+                padding: 8px 12px;
+                text-align: center;
+                border-radius: 6px;
+            }
+        }
+        
+        .mobile-notice {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            font-family: monospace;
+            padding: 30px;
+            box-sizing: border-box;
+        }
+        
+        .mobile-notice-content {
+            width: 100%;
+            max-width: 450px;
+            text-align: center;
+            color: white;
+        }
+        
+        .mobile-notice h2 {
+            color: #fff;
+            margin: 0 0 20px 0;
+            font-size: 1.5em;
+            font-weight: normal;
+            letter-spacing: 0.5px;
+        }
+        
+        .mobile-notice p {
+            margin: 0 0 25px 0;
+            line-height: 1.6;
+            color: #aaa;
+            font-size: 0.95em;
+        }
+        
+        .acknowledge-btn {
+            background: transparent;
+            border: 1px solid #555;
+            padding: 12px 30px;
+            border-radius: 4px;
+            color: #fff;
+            font-family: monospace;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .acknowledge-btn:active {
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body>
+    <!-- Mobile Notice Modal -->
+    <div id="mobile-notice" class="mobile-notice" style="display: none;">
+        <div class="mobile-notice-content">
+            <h2>Desktop Recommended</h2>
+            <p>This portfolio is optimized for desktop viewing with interactive features including draggable windows and keyboard navigation.</p>
+            <p>You can continue on mobile, but the full experience is available on desktop.</p>
+            <button class="acknowledge-btn" onclick="dismissMobileNotice()">
+                Continue
+            </button>
+        </div>
+    </div>
+
+    <div id="terminal">
+        <div id="topbar">
+            <div style="display: flex; align-items: center; height: 100%; padding: 0 5px;" class="user-select-none">
+                <img src="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg" alt="Command Prompt Icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;">
+                Administrator: Command Prompt
+            </div>
+            <div id="window-buttons" class="user-select-none">
+                <span class="button">-</span>
+                <span style="font-size: 15px;" class="button">□</span>
+                <span style="font-size: 20px;" class="button buttonx">×</span>
+            </div>
+        </div>
+        <div id="output-container">
+            <div class="initial-message" style="color: white; font-family: monospace; margin-bottom: 10px;">
+                JadXV's Portfolio [Version 10.0.26100.2605]<br><span style="color: #ff6c6c;">Type 'help' to see available commands (about me)</span>   
+            </div>
+            <div class="command-line">
+                <span class="prompt">C:\Users\JadXV></span>
+                <input type="text" id="input" autofocus autocomplete="off">
+            </div>
+        </div>
+        <div class="resize-handle"></div>
+    </div>
+    <script>
+        const commandsran = [];
+        const commands = {
+            whoami: "<span style='color: #ffffff;'>My name is </span><span style='color: #ff6b9d; font-weight: bold;'>Jad</span><span style='color: #ffffff;'>, I go by the alias </span><span style='color: #4fc3f7; font-weight: bold;'>JadXV</span><span style='color: #ffffff;'>.</span><br><span style='color: #ffffff;'>I'm an </span><span style='color: #ffeb3b; font-weight: bold;'>AvGeek</span><span style='color: #ffffff;'> and </span><span style='color: #9c27b0; font-weight: bold;'>programmer</span><span style='color: #ffffff;'> in various languages.</span><br><br><span style='color: #00d4aa;'>→</span> <span style='color: #ffffff;'>Find out what I code in by running </span><span style='color: #ff9800; background: rgba(255, 152, 0, 0.1); padding: 2px 6px; border-radius: 3px;'>'skills'</span><br><span style='color: #00d4aa;'>→</span> <span style='color: #ffffff;'>For aviation info run </span><span style='color: #ff9800; background: rgba(255, 152, 0, 0.1); padding: 2px 6px; border-radius: 3px;'>'avgeek'</span>",
+            
+            skills: "<span style='color: #ffffff;'>I'm skilled in:</span><br><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF7043; font-weight: bold;'>BAT & Shell Scripting</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #1E90FF; font-weight: bold;'>C#</span> <span style='color: #888;'>(.NET Framework)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF6347; font-weight: bold;'>Rust</span> <span style='color: #888;'>(Systems Programming)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #5F9EA0; font-weight: bold;'>Lua</span> <span style='color: #888;'>(Scripting)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #F5F5F5; font-weight: bold;'>HTML & CSS</span> <span style='color: #888;'>(Web Development)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #B0E0E6; font-weight: bold;'>TypeScript</span> <span style='color: #888;'>(Type-safe JS)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF8C00; font-weight: bold;'>JavaScript</span> <span style='color: #888;'>(Frontend/Backend)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF8C69; font-weight: bold;'>Java</span> <span style='color: #888;'>(Enterprise)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FFFF33; font-weight: bold;'>Python</span> <span style='color: #00d4aa; font-weight: bold;'>(Primary Language)</span>",
+            
+            avgeek: "<span style='color: #ffffff;'>I'm an </span><span style='color: #ffeb3b; font-weight: bold;'>AvGeek</span><span style='color: #ffffff;'> - I love planes and aviation in general!</span><br><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Flight simulation enthusiast</span><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Extensive knowledge of aircraft systems</span><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Aviation industry follower</span><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Multiple flight sim platforms</span>",
+            
+            github: "<span style='color: #ffeb3b;'>⚠️</span> <span style='color: #ffffff;'>Keep in mind that </span><span style='color: #ff6b9d; font-weight: bold;'>98%</span><span style='color: #ffffff;'> of my projects are private</span><br><span style='color: #ffffff;'>But I'm working towards open sourcing them!</span><br><br><a href='https://github.com/JadXV' target='_blank' class='modern-link'>🔗 My GitHub Profile</a>",
+            
+            socials: "<span style='color: #9c27b0;'>💬</span> <span style='color: #ffffff;'>Discord: </span><span style='color: #5865f2; font-weight: bold; background: rgba(88, 101, 242, 0.1); padding: 2px 6px; border-radius: 3px;'>@JadXV.</span> <span style='color: #888;'>(with the dot)</span><br><br><span style='color: #ffffff;'>Other platforms:</span><br><span style='color: #ff6b9d;'>●</span> <a href='https://www.youtube.com/@jadxvx' target='_blank' class='modern-link youtube'>📺 YouTube</a><br><span style='color: #ff6b9d;'>●</span> <a href='https://x.com/JadXvX' target='_blank' class='modern-link twitter'>🐦 Twitter/X</a><br><span style='color: #ff6b9d;'>●</span> <a href='https://www.roblox.com/users/1167933334/profile' target='_blank' class='modern-link roblox'>🎮 Roblox</a>",
+            
+            achievements: "<span style='color: #ffffff;'>My competition achievements:</span><br><br><span style='color: #ffd700;'>🎖️</span> <span style='color: #FF6B35; font-weight: bold; font-size: 1.1em;'>High Placing Member</span><br><span style='color: #ffffff;'>   </span><span style='color: #FF6B35; font-weight: bold;'>SpurHacks 2025</span><span style='color: #ffffff;'> - Biggest hackathon in Ontario</span><br><br><span style='color: #ffd700;'>🏆</span> <span style='color: #FFECA1; font-weight: bold; font-size: 1.1em;'>1st Place Winner</span><br><span style='color: #ffffff;'>   </span><span style='color: #9101BA; font-weight: bold;'>StackHacks</span><span style='color: #ffffff;'> Hackathon</span><br><br><span style='color: #4fc3f7;'>🎯</span> <span style='color: #ffffff;'>Multiple hackathon participations</span><br><span style='color: #4fc3f7;'>🎯</span> <span style='color: #ffffff;'>Various coding competitions</span><br><br><span style='color: #888;'>For more details run </span><span style='color: #ff9800; background: rgba(255, 152, 0, 0.1); padding: 2px 6px; border-radius: 3px;'>'github'</span>",
+            
+            projects: "<span style='color: #ffeb3b;'>🚧</span> <span style='color: #ffffff;'>Working on open sourcing my projects</span><br><span style='color: #4fc3f7;'>👀</span> <span style='color: #ffffff;'>Keep an eye on my GitHub for updates</span><br><span style='color: #ff6b9d;'>📊</span> <span style='color: #ffffff;'>Various tools and applications in development</span>",
+            
+            cls: "Clears the terminal screen",
+            help: "Gives a list of available commands",
+        };
+
+        const input = document.getElementById('input');
+        const outputContainer = document.getElementById('output-container');
+        const terminal = document.getElementById('terminal');
+        
+        function isMobile() {
+            return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+        }
+        
+        function showMobileNotice() {
+            if (isMobile()) {
+                document.getElementById('mobile-notice').style.display = 'flex';
+            }
+        }
+        
+        function dismissMobileNotice() {
+            const notice = document.getElementById('mobile-notice');
+            notice.style.animation = 'fadeOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                notice.style.display = 'none';
+                input.focus();
+            }, 300);
+        }
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Allow dismissing by clicking outside the content
+        document.getElementById('mobile-notice')?.addEventListener('click', function(e) {
+            if (e.target === this) {
+                dismissMobileNotice();
+            }
+        });
+        
+        window.addEventListener('load', () => {
+            showMobileNotice();
+            if (!terminal.style.left) terminal.style.left = '10%';
+            if (!terminal.style.top) terminal.style.top = '10%';
+        });
+        
+        let originalDimensions = { width: '80%', height: '80%', left: '10%', top: '10%' };
+        let isDragging = false, isResizing = false, offsetX, offsetY;
+
+        document.querySelectorAll('.button').forEach(button => {
+            button.addEventListener('click', function() {
+                if (button.innerText === '□') {
+                    if (terminal.classList.contains('maximized')) {
+                        terminal.classList.remove('maximized');
+                        Object.assign(terminal.style, originalDimensions);
+                    } else {
+                        originalDimensions = {
+                            width: terminal.style.width || '80%',
+                            height: terminal.style.height || '80%',
+                            left: terminal.style.left || '10%',
+                            top: terminal.style.top || '10%'
+                        };
+                        terminal.classList.add('maximized');
+                        terminal.style.width = '100%';
+                        terminal.style.height = '100%';
+                        terminal.style.left = '0';
+                        terminal.style.top = '0';
+                    }
+                } else if (button.innerText === '-' || button.innerText === '×') {
+                    terminal.classList.add('minimized');
+                    
+                    setTimeout(() => {
+                        terminal.style.display = 'none';
+                        if (!document.getElementById('reopen-message')) {
+                            const reopenDiv = document.createElement('div');
+                            reopenDiv.id = 'reopen-message';
+                            reopenDiv.style = 'font-family: monospace; color: white; text-align: center; margin-top: 20vh; cursor: pointer;';
+                            reopenDiv.innerHTML = "You've closed/minimized my portfolio, press anywhere to reopen";
+                            document.body.appendChild(reopenDiv);
+                            
+                            document.body.addEventListener('click', function reopenListener() {
+                                const reopenMessage = document.getElementById('reopen-message');
+                                if (reopenMessage) reopenMessage.remove();
+                                
+                                terminal.style.display = 'flex';
+                                setTimeout(() => {
+                                    terminal.classList.remove('minimized');
+                                    input.focus(); 
+                                }, 10);
+                                
+                                document.body.removeEventListener('click', reopenListener);
+                            });
+                        }
+                    }, 300); 
+                } 
+            });
+        });
+
+        terminal.addEventListener('click', () => input.focus());
+
+        input.addEventListener('keydown', function(event) {
+            if (event.key === 'ArrowUp' && commandsran.length > 0) {
+                event.preventDefault();
+                input.value = commandsran.pop();
+            } else if (event.key == 'Tab') {
+                event.preventDefault();
+                const command = input.value.toLowerCase();
+                const matchingCommands = Object.keys(commands).filter(c => c.startsWith(command));
+                if (matchingCommands.length === 1) input.value = matchingCommands[0];
+            } else if (event.key === 'Enter') {
+                const commandInput = input.value;
+                const command = commandInput.toLowerCase(); 
+                
+                if (commands[command]) {
+                    if (command === 'cls') {
+                        while (outputContainer.children.length > 1) {
+                            outputContainer.removeChild(outputContainer.children[0]);
+                        }
+                        input.value = '';
+                        return; 
+                    }
+                }
+                
+                const newOutput = document.createElement('div');
+                newOutput.classList.add('command-line');
+                newOutput.innerHTML = `<span class="prompt">C:\\Users\\JadXV></span> ${commandInput}`;
+                
+                const commandResult = document.createElement('div');
+                commandResult.classList.add('command-output');
+                commandsran.push(commandInput);
+                
+                if (commands[command]) {
+                    if (command === 'help') {
+                        commandResult.innerHTML = "<span style='color: #ffffff;'>Here are all the commands you can use:</span><br><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #4fc3f7; font-weight: bold;'>whoami</span> <span style='color: #888;'>- Learn more about me</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ffeb3b; font-weight: bold;'>skills</span> <span style='color: #888;'>- View programming languages & skills</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ff9800; font-weight: bold;'>avgeek</span> <span style='color: #888;'>- Aviation enthusiasm & flight sim</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #9c27b0; font-weight: bold;'>github</span> <span style='color: #888;'>- View GitHub profile</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #00d4aa; font-weight: bold;'>socials</span> <span style='color: #888;'>- Social media & contact info</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ffd700; font-weight: bold;'>achievements</span> <span style='color: #888;'>- Hackathons & competitions</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ff6347; font-weight: bold;'>projects</span> <span style='color: #888;'>- Current development work</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #b0b0b0; font-weight: bold;'>cls</span> <span style='color: #888;'>- Clear the terminal screen</span><br>" +
+                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #e91e63; font-weight: bold;'>help</span> <span style='color: #888;'>- Show this help menu</span><br><br>" +
+                            "<span style='color: #888;'>💡 Tip: Use Tab for command auto-completion!</span>";
+                    } else {
+                        commandResult.innerHTML = commands[command];
+                    }
+                } else if (command === '') {
+                    commandResult.innerHTML = '';
+                } else {
+                    commandResult.innerHTML = `<span class="error">'${commandInput}' is not recognized as an internal or external command,<br>operable program or batch file.<br><br>Type 'help' to see available commands</span>`;
+                }
+                
+                outputContainer.insertBefore(newOutput, input.parentElement);
+                outputContainer.insertBefore(commandResult, input.parentElement);
+                outputContainer.insertBefore(document.createElement('br'), input.parentElement);
+                input.value = '';
+                outputContainer.scrollTop = outputContainer.scrollHeight;
+            }
+        });
+
+        const topbar = document.getElementById('topbar');
+
+        window.addEventListener('load', () => {
+            if (!terminal.style.left) terminal.style.left = '10%';
+            if (!terminal.style.top) terminal.style.top = '10%';
+        });
+
+        topbar.addEventListener('mousedown', function(event) {
+            if (event.button !== 0) return;
+            if (isMobile()) return; 
+            
+            event.preventDefault();
+            isDragging = true;
+            
+            const terminalRect = terminal.getBoundingClientRect();
+            offsetX = event.clientX - terminalRect.left;
+            offsetY = event.clientY - terminalRect.top;
+            
+            terminal.classList.add('dragging');
+        });
+
+        topbar.addEventListener('dblclick', function() {
+            if (terminal.classList.contains('maximized') || isMobile()) return;
+            
+            const windowWidth = window.innerWidth;
+            const windowHeight = window.innerHeight;
+            const terminalRect = terminal.getBoundingClientRect();
+            
+            terminal.style.transition = 'all 0.3s ease-out';
+            terminal.style.left = `${(windowWidth - terminalRect.width) / 2}px`;
+            terminal.style.top = `${(windowHeight - terminalRect.height) / 2}px`;
+            
+            setTimeout(() => terminal.style.transition = 'all 0.3s ease-in-out', 300);
+        });
+
+        document.addEventListener('mousemove', function(event) {
+            if (isDragging && !terminal.classList.contains('maximized')) {
+                let newLeft = event.clientX - offsetX;
+                let newTop = event.clientY - offsetY;
+                
+                const terminalRect = terminal.getBoundingClientRect();
+                const minVisible = 50;
+                
+                newLeft = Math.max(-terminalRect.width + minVisible, Math.min(newLeft, window.innerWidth - minVisible));
+                newTop = Math.max(0, Math.min(newTop, window.innerHeight - minVisible));
+                
+                terminal.style.transition = 'none';
+                terminal.style.left = `${newLeft}px`;
+                terminal.style.top = `${newTop}px`;
+            }
+        });
+
+        document.addEventListener('mouseup', function() {
+            if (isDragging) {
+                isDragging = false;
+                terminal.classList.remove('dragging');
+                terminal.style.transition = 'all 0.3s ease-in-out';
+            }
+        });
+
+        document.addEventListener('mouseleave', function() {
+            if (isDragging) {
+                isDragging = false;
+                terminal.classList.remove('dragging');
+                terminal.style.transition = 'all 0.3s ease-in-out';
+            }
+        });
+
+        document.querySelector('.resize-handle').addEventListener('mousedown', function(event) {
+            if (terminal.classList.contains('maximized') || isMobile()) return;
+            
+            event.preventDefault();
+            isResizing = true;
+            
+            const startX = event.clientX;
+            const startY = event.clientY;
+            const startWidth = terminal.offsetWidth;
+            const startHeight = terminal.offsetHeight;
+            
+            function resize(e) {
+                if (!isResizing) return;
+                
+                terminal.style.transition = 'none';
+                
+                const width = startWidth + (e.clientX - startX);
+                const height = startHeight + (e.clientY - startY);
+                
+                const minWidth = parseInt(getComputedStyle(terminal).minWidth) || 250;
+                const minHeight = parseInt(getComputedStyle(terminal).minHeight) || 200;
+                
+                terminal.style.width = `${Math.max(minWidth, width)}px`;
+                terminal.style.height = `${Math.max(minHeight, height)}px`;
+            }
+            
+            function stopResize() {
+                if (isResizing) {
+                    isResizing = false;
+                    setTimeout(() => terminal.style.transition = 'all 0.3s ease-in-out', 50);
+                    document.removeEventListener('mousemove', resize);
+                    document.removeEventListener('mouseup', stopResize);
+                }
+            }
+            
+            document.addEventListener('mousemove', resize);
+            document.addEventListener('mouseup', stopResize);
+        });
+    </script>
+</body>
+</html>
