@@ -3,16 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio</title>
+    <title>JadXV | Developer & Programmer Portfolio</title>
+    <meta name="title" content="JadXV | Developer & Programmer Portfolio">
+    <meta name="description" content="Hi, I'm Jad (JadXV) - a programmer skilled in Python, Rust, TypeScript, C#, and more. Hackathon winner and aviation enthusiast. Explore my interactive terminal-style portfolio.">
+    <meta name="keywords" content="JadXV, Jad, developer, programmer, portfolio, Python, Rust, TypeScript, JavaScript, C#, hackathon winner, StackHacks, SpurHacks">
+    <meta name="author" content="JadXV">
+    <meta name="robots" content="index, follow">
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="JadXV | Developer & Programmer Portfolio">
+    <meta property="og:description" content="Hi, I'm Jad (JadXV) - a programmer skilled in Python, Rust, TypeScript, C#, and more. Hackathon winner and aviation enthusiast. Explore my interactive terminal-style portfolio.">
+    <meta property="og:image" content="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="JadXV | Developer & Programmer Portfolio">
+    <meta name="twitter:description" content="Hi, I'm Jad (JadXV) - a programmer skilled in Python, Rust, TypeScript, C#, and more. Hackathon winner and aviation enthusiast. Explore my interactive terminal-style portfolio.">
+    <meta name="twitter:image" content="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg">
+    <meta name="twitter:creator" content="@JadXvX">
     <link rel="icon" href="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg">
     <style>
         body {
-            background: linear-gradient(135deg, 
-                #0a0a0a 0%, 
-                #1a1a2e 25%, 
-                #16213e 50%, 
-                #0f3460 75%, 
-                #1a1a2e 100%);
+            background: linear-gradient(135deg, #0a0a0a 0%, #1a0a1a 15%, #2d1b3d 35%, #4a1f5c 50%, #2d1b3d 65%, #1a0a1a 85%, #0a0a0a 100%);
             background-attachment: fixed;
             background-size: cover;
             position: relative;
@@ -26,6 +35,7 @@
             height: 100vh;
             overflow: hidden;
         }
+
         body::before {
             content: '';
             position: fixed;
@@ -33,42 +43,44 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
-                radial-gradient(ellipse at 30% 20%, rgba(30,60,114,0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 80%, rgba(10,10,10,0.3) 0%, transparent 50%),
-                radial-gradient(ellipse at 20% 70%, rgba(26,26,46,0.2) 0%, transparent 40%);
+            background: radial-gradient(ellipse at 30% 20%, rgba(74,31,92,.25) 0%, transparent 50%),
+                        radial-gradient(ellipse at 70% 80%, rgba(10,10,10,.3) 0%, transparent 50%),
+                        radial-gradient(ellipse at 20% 70%, rgba(45,27,61,.3) 0%, transparent 40%);
             pointer-events: none;
         }
+
         #terminal {
-            background-color: black;
+            background-color: #000;
             border: 2px solid #171515;
             padding: 0;
             width: 80%;
             height: 80%;
-            display: flex;
+            display: none;
             flex-direction: column;
             position: absolute;
-            resize: none; 
+            resize: none;
             box-sizing: border-box;
             overflow: hidden;
             border-radius: 10px;
             min-width: 25%;
             min-height: 25%;
-            max-width: 100%; 
+            max-width: 100%;
             max-height: 100%;
-            transition: all 0.3s ease-in-out;
+            transition: all .3s ease-in-out;
             transform-origin: center;
             top: 10%;
             left: 10%;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0,0,0,.3);
         }
+
         #terminal.minimized {
-            transform: scale(0.1);
+            transform: scale(.1);
             opacity: 0;
             top: 100%;
             left: 50%;
             pointer-events: none;
         }
+
         #terminal.maximized {
             width: 100%;
             height: 100%;
@@ -76,9 +88,10 @@
             top: 0;
             border-radius: 0;
         }
+
         #topbar {
             background-color: #171515;
-            color: white;
+            color: #fff;
             padding: 0 10px;
             font-family: monospace;
             text-align: left;
@@ -86,7 +99,7 @@
             justify-content: space-between;
             align-items: center;
             cursor: move;
-            position: sticky; 
+            position: sticky;
             top: 0;
             width: 100%;
             z-index: 1000;
@@ -95,6 +108,7 @@
             border-top-left-radius: 8px;
             border-top-right-radius: 8px;
         }
+
         #window-buttons {
             display: flex;
             gap: 0;
@@ -103,8 +117,9 @@
             height: 100%;
             padding-right: 10px;
         }
+
         .button {
-            color: white;
+            color: #fff;
             padding: 0 15px;
             cursor: pointer;
             display: flex;
@@ -114,8 +129,10 @@
             user-select: none;
             margin: 0;
         }
+
         .button:hover { background-color: #675d5d; }
-        .buttonx:hover { background-color: #ff0000; }
+        .buttonx:hover { background-color: #f00; }
+
         #output-container {
             display: flex;
             flex-direction: column;
@@ -123,22 +140,22 @@
             flex-grow: 1;
             overflow-y: auto;
         }
-        .command-line {
-            display: flex;
-            align-items: center;
-        }
+
+        .command-line { display: flex; align-items: center; }
         .prompt { margin-right: 5px; }
+
         #input {
             font-family: monospace;
             width: 100%;
             border: none;
             background: none;
-            color: white;
+            color: #fff;
             outline: none;
             flex-grow: 1;
             padding: 0;
             font-size: inherit;
         }
+
         .resize-handle {
             position: absolute;
             bottom: 0;
@@ -149,79 +166,50 @@
             background: linear-gradient(135deg, transparent 70%, #444 70%, #444 100%);
             border-bottom-right-radius: 8px;
         }
-        .command-output { color: rgb(165, 165, 218); }
+
+        .command-output { color: rgb(165,165,218); }
         .command-output .error { color: red; }
-        #output-container::-webkit-scrollbar {
-            width: 8px;
-        }
-        #output-container::-webkit-scrollbar-track {
-            background: #171515;
-        }
-        #output-container::-webkit-scrollbar-thumb {
-            background-color: #444;
-            border-radius: 0;
-            border: 2px solid #1e1e1e;
-        }
-        #output-container::-webkit-scrollbar-thumb:hover {
-            background-color: #555;
-        }
+
+        #output-container::-webkit-scrollbar { width: 8px; }
+        #output-container::-webkit-scrollbar-track { background: #171515; }
+        #output-container::-webkit-scrollbar-thumb { background-color: #444; border-radius: 0; border: 2px solid #1e1e1e; }
+        #output-container::-webkit-scrollbar-thumb:hover { background-color: #555; }
+
         .modern-link {
             color: #6c5ce7;
-            background-color: rgba(108, 92, 231, 0.1);
+            background-color: rgba(108,92,231,.1);
             padding: 2px 8px;
             border-radius: 0;
             text-decoration: none;
-            transition: all 0.2s ease;
+            transition: all .2s ease;
             font-weight: bold;
             display: inline-block;
             margin: 2px 0;
         }
+
         .modern-link:hover {
-            background-color: rgba(108, 92, 231, 0.2);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            background-color: rgba(108,92,231,.2);
+            box-shadow: 0 2px 5px rgba(0,0,0,.2);
         }
-        .modern-link.youtube {
-            color: #ff0000;
-            background-color: rgba(255, 0, 0, 0.1);
-        }
-        .modern-link.youtube:hover {
-            background-color: rgba(255, 0, 0, 0.2);
-        }
-        .modern-link.twitter {
-            color: #1DA1F2;
-            background-color: rgba(29, 161, 242, 0.1);
-        }
-        .modern-link.twitter:hover {
-            background-color: rgba(29, 161, 242, 0.2);
-        }
-        .modern-link.roblox {
-            color: #00A2FF;
-            background-color: rgba(0, 162, 255, 0.1);
-        }
-        .modern-link.roblox:hover {
-            background-color: rgba(0, 162, 255, 0.2);
-        }
-        .modern-link.gunslol {
-            color: #FF5733;
-            background-color: rgba(255, 87, 51, 0.1);
-        }
-        .modern-link.gunslol:hover {
-            background-color: rgba(255, 87, 51, 0.2);
-        }
+
+        .modern-link.youtube { color: #f00; background-color: rgba(255,0,0,.1); }
+        .modern-link.youtube:hover { background-color: rgba(255,0,0,.2); }
+        .modern-link.twitter { color: #1DA1F2; background-color: rgba(29,161,242,.1); }
+        .modern-link.twitter:hover { background-color: rgba(29,161,242,.2); }
+        .modern-link.gunslol { color: #FF5733; background-color: rgba(255,87,51,.1); }
+        .modern-link.gunslol:hover { background-color: rgba(255,87,51,.2); }
+        .modern-link.devpost { color: #003E54; background-color: rgba(0,62,84,.1); }
+        .modern-link.devpost:hover { background-color: rgba(0,62,84,.2); }
+
         .user-select-none {
             user-select: none;
-            -webkit-user-select: none; 
-            -moz-user-select: none; 
+            -webkit-user-select: none;
+            -moz-user-select: none;
             -ms-user-select: none;
         }
-        
+
         @media (max-width: 768px) {
-            body {
-                padding: 10px;
-                box-sizing: border-box;
-            }
-            
+            body { padding: 10px; box-sizing: border-box; }
             #terminal {
                 width: 95% !important;
                 height: 90% !important;
@@ -231,60 +219,28 @@
                 min-height: 90%;
                 font-size: 14px;
             }
-            
             #terminal.maximized {
                 width: 100% !important;
                 height: 100% !important;
                 left: 0 !important;
                 top: 0 !important;
             }
-            
-            #topbar {
-                height: 40px;
-                padding: 0 8px;
-                font-size: 12px;
-            }
-            
-            #window-buttons {
-                gap: 5px;
-                padding-right: 8px;
-            }
-            
-            .button {
-                padding: 0 12px;
-                font-size: 18px;
-            }
-            
-            #output-container {
-                padding: 8px;
-                font-size: 13px;
-                line-height: 1.4;
-            }
-            
-            #input {
-                font-size: 13px;
-            }
-            
-            .resize-handle {
-                display: none;
-            }
-            
-            .modern-link {
-                display: block;
-                margin: 4px 0;
-                padding: 8px 12px;
-                text-align: center;
-                border-radius: 6px;
-            }
+            #topbar { height: 40px; padding: 0 8px; font-size: 12px; }
+            #window-buttons { gap: 5px; padding-right: 8px; }
+            .button { padding: 0 12px; font-size: 18px; }
+            #output-container { padding: 8px; font-size: 13px; line-height: 1.4; }
+            #input { font-size: 13px; }
+            .resize-handle { display: none; }
+            .modern-link { display: block; margin: 4px 0; padding: 8px 12px; text-align: center; border-radius: 6px; }
         }
-        
+
         .mobile-notice {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
+            background: rgba(0,0,0,.95);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -294,29 +250,29 @@
             padding: 30px;
             box-sizing: border-box;
         }
-        
+
         .mobile-notice-content {
             width: 100%;
             max-width: 450px;
             text-align: center;
-            color: white;
+            color: #fff;
         }
-        
+
         .mobile-notice h2 {
             color: #fff;
             margin: 0 0 20px 0;
             font-size: 1.5em;
             font-weight: normal;
-            letter-spacing: 0.5px;
+            letter-spacing: .5px;
         }
-        
+
         .mobile-notice p {
             margin: 0 0 25px 0;
             line-height: 1.6;
             color: #aaa;
-            font-size: 0.95em;
+            font-size: .95em;
         }
-        
+
         .acknowledge-btn {
             background: transparent;
             border: 1px solid #555;
@@ -326,42 +282,312 @@
             font-family: monospace;
             font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all .2s ease;
         }
-        
-        .acknowledge-btn:active {
-            background: rgba(255, 255, 255, 0.1);
+
+        .acknowledge-btn:active { background: rgba(255,255,255,.1); }
+
+        .taskbar {
+            width: 100%;
+            height: 48px;
+            background: rgba(25,25,25,.95);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            padding: 0;
+            border-top: 1px solid rgba(255,255,255,.05);
+            position: fixed;
+            bottom: -48px;
+            left: 0;
+            transition: bottom .5s cubic-bezier(.25,.46,.45,.94);
+            z-index: 9999;
+            box-sizing: border-box;
+        }
+
+        .taskbar.show { bottom: 0; }
+        .taskbar.hide { bottom: -48px; }
+
+        .taskbar-left {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            flex-shrink: 0;
+        }
+
+        .start-button {
+            width: 52px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: background-color .15s ease;
+            box-sizing: border-box;
+        }
+
+        .start-button:hover { background: rgba(255,255,255,.1); }
+
+        .start-icon {
+            width: 28px;
+            height: 28px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .start-icon svg { width: 100%; height: 100%; display: block; }
+
+        .search-box {
+            height: 32px;
+            width: 300px;
+            margin-left: 0;
+            background: rgba(255,255,255,.08);
+            border: 1px solid rgba(255,255,255,.08);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 12px;
+            transition: background-color .15s ease, border-color .15s ease;
+            box-sizing: border-box;
+        }
+
+        .search-box:hover {
+            background: rgba(255,255,255,.12);
+            border-color: rgba(255,255,255,.15);
+        }
+
+        .search-icon {
+            width: 18px;
+            height: 18px;
+            margin-right: 10px;
+            opacity: .7;
+            flex-shrink: 0;
+        }
+
+        .search-box input {
+            background: none;
+            border: none;
+            outline: none;
+            color: #fff;
+            font-size: 13px;
+            width: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            pointer-events: none;
+        }
+
+        .search-box input::placeholder { color: rgba(255,255,255,.6); }
+
+        .taskbar-center {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            margin-left: 8px;
+            flex-grow: 1;
+        }
+
+        .app-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: background-color .15s ease;
+            box-sizing: border-box;
+        }
+
+        .app-icon:hover { background: rgba(255,255,255,.1); }
+        .app-icon svg { width: 28px; height: 28px; display: block; }
+
+        .app-icon.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50%;
+            height: 3px;
+            background: #0078d7;
+        }
+
+        .taskbar-right {
+            display: flex;
+            align-items: center;
+            height: 100%;
+            margin-left: auto;
+            flex-shrink: 0;
+        }
+
+        .system-tray {
+            display: flex;
+            align-items: center;
+            height: 100%;
+        }
+
+        .chevron-button, .system-icon {
+            width: 32px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color .15s ease;
+            box-sizing: border-box;
+        }
+
+        .chevron-button:hover, .system-icon:hover { background: rgba(255,255,255,.1); }
+        .chevron-button svg { width: 14px; height: 14px; opacity: .9; display: block; }
+        .system-icon svg { width: 18px; height: 18px; fill: #fff; opacity: .9; display: block; }
+
+        .clock {
+            height: 48px;
+            padding: 0 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 80px;
+            cursor: pointer;
+            transition: background-color .15s ease;
+            box-sizing: border-box;
+        }
+
+        .clock:hover { background: rgba(255,255,255,.1); }
+        .clock-time, .clock-date { font-size: 12px; color: #fff; line-height: 14px; }
+
+        .notification-button {
+            width: 36px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-left: 1px solid rgba(255,255,255,.08);
+            cursor: pointer;
+            transition: background-color .15s ease;
+            box-sizing: border-box;
+        }
+
+        .notification-button:hover { background: rgba(255,255,255,.1); }
+        .notification-button svg { width: 18px; height: 18px; opacity: .9; display: block; }
+
+        .show-desktop {
+            width: 2px;
+            height: 48px;
+            border-left: 1px solid rgba(255,255,255,.15);
+        }
+
+        .cursor {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            pointer-events: none;
+            z-index: 10000;
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .cursor.show { opacity: 1; }
+
+        @media (max-width: 768px) {
+            .taskbar, .cursor { display: none; }
         }
     </style>
 </head>
 <body>
-    <!-- Mobile Notice Modal -->
-    <div id="mobile-notice" class="mobile-notice" style="display: none;">
+    <div id="mobile-notice" class="mobile-notice" style="display:none">
         <div class="mobile-notice-content">
             <h2>Desktop Recommended</h2>
             <p>This portfolio is optimized for desktop viewing with interactive features including draggable windows and keyboard navigation.</p>
             <p>You can continue on mobile, but the full experience is available on desktop.</p>
-            <button class="acknowledge-btn" onclick="dismissMobileNotice()">
-                Continue
-            </button>
+            <button class="acknowledge-btn" onclick="dismissMobileNotice()">Continue</button>
         </div>
+    </div>
+
+    <div class="taskbar">
+        <div class="taskbar-left">
+            <div class="start-button">
+                <div class="start-icon">
+                    <svg viewBox="0 0 20 20">
+                        <rect x="0" y="0" width="8.5" height="8.5" fill="#0078d7"/>
+                        <rect x="10.5" y="0" width="8.5" height="8.5" fill="#0078d7"/>
+                        <rect x="0" y="10.5" width="8.5" height="8.5" fill="#0078d7"/>
+                        <rect x="10.5" y="10.5" width="8.5" height="8.5" fill="#0078d7"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 16 16" fill="none">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z" fill="#ffffff" opacity="0.7"/>
+                </svg>
+                <input type="text" placeholder="Type here to search" readonly>
+            </div>
+        </div>
+        <div class="taskbar-center">
+            <div class="app-icon cmd-icon-taskbar" id="cmdIcon">
+                <svg viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="1" fill="#0c0c0c"/>
+                    <path d="M6 8l4 4-4 4M10 16h6" stroke="#cccccc" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                </svg>
+            </div>
+        </div>
+        <div class="taskbar-right">
+            <div class="system-tray">
+                <div class="chevron-button">
+                    <svg viewBox="0 0 16 16">
+                        <path d="M4 9l4-4 4 4" stroke="#ffffff" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </div>
+                <div class="system-icon">
+                    <svg viewBox="0 0 16 16">
+                        <path d="M2 5.5h2l3-3v11l-3-3H2v-5zm7 1c.5.5.5 2.5 0 3" stroke="#ffffff" fill="none" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+                <div class="system-icon">
+                    <svg viewBox="0 0 16 16">
+                        <path d="M8 12a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z" fill="#ffffff"/>
+                        <path d="M5.5 8.5c.7-.7 1.5-1 2.5-1s1.8.3 2.5 1M3.5 6.5c1.2-1.2 2.8-1.5 4.5-1.5s3.3.3 4.5 1.5M1.5 4.5c1.8-1.8 4-2.5 6.5-2.5s4.7.7 6.5 2.5" stroke="#ffffff" fill="none" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="clock">
+                <div class="clock-time" id="taskbar-time">12:00 PM</div>
+                <div class="clock-date" id="taskbar-date">10/6/2025</div>
+            </div>
+            <div class="notification-button">
+                <svg viewBox="0 0 16 16">
+                    <path d="M2 3h12v9H2z" fill="none" stroke="#ffffff" stroke-width="1.2"/>
+                    <path d="M4 6h8M4 8h8M4 10h5" stroke="#ffffff" stroke-width="1" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div class="show-desktop"></div>
+        </div>
+    </div>
+
+    <div class="cursor" id="cursor">
+        <svg viewBox="0 0 20 20" width="20" height="20">
+            <path d="M0 0l8 20 3-8 8-3z" fill="#ffffff" stroke="#000000" stroke-width="0.5"/>
+        </svg>
     </div>
 
     <div id="terminal">
         <div id="topbar">
-            <div style="display: flex; align-items: center; height: 100%; padding: 0 5px;" class="user-select-none">
-                <img src="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg" alt="Command Prompt Icon" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 5px;">
+            <div style="display:flex;align-items:center;height:100%;padding:0 5px" class="user-select-none">
+                <img src="https://www.eu-startups.com/wp-content/uploads/2021/07/1626354376747.jpeg" alt="Command Prompt Icon" style="width:16px;height:16px;vertical-align:middle;margin-right:5px">
                 Administrator: Command Prompt
             </div>
             <div id="window-buttons" class="user-select-none">
                 <span class="button">-</span>
-                <span style="font-size: 15px;" class="button">□</span>
-                <span style="font-size: 20px;" class="button buttonx">×</span>
+                <span style="font-size:15px" class="button">□</span>
+                <span style="font-size:20px" class="button buttonx">×</span>
             </div>
         </div>
         <div id="output-container">
-            <div class="initial-message" style="color: white; font-family: monospace; margin-bottom: 10px;">
-                JadXV's Portfolio [Version 10.0.26100.2605]<br><span style="color: #ff6c6c;">Type 'help' to see available commands (about me)</span>   
+            <div class="initial-message" style="color:white;font-family:monospace;margin-bottom:10px">
+                JadXV's Portfolio [Version 10.0.26100.2605]<br>
+                <span style="color:#ff6c6c">Type 'help' to see available commands (about me)</span>
             </div>
             <div class="command-line">
                 <span class="prompt">C:\Users\JadXV></span>
@@ -370,74 +596,183 @@
         </div>
         <div class="resize-handle"></div>
     </div>
-    <script>
-        const commandsran = [];
-        const commands = {
-            whoami: "<span style='color: #ffffff;'>My name is </span><span style='color: #ff6b9d; font-weight: bold;'>Jad</span><span style='color: #ffffff;'>, I go by the alias </span><span style='color: #4fc3f7; font-weight: bold;'>JadXV</span><span style='color: #ffffff;'>.</span><br><span style='color: #ffffff;'>I'm an </span><span style='color: #ffeb3b; font-weight: bold;'>AvGeek</span><span style='color: #ffffff;'> and </span><span style='color: #9c27b0; font-weight: bold;'>programmer</span><span style='color: #ffffff;'> in various languages.</span><br><br><span style='color: #00d4aa;'>→</span> <span style='color: #ffffff;'>Find out what I code in by running </span><span style='color: #ff9800; background: rgba(255, 152, 0, 0.1); padding: 2px 6px; border-radius: 3px;'>'skills'</span><br><span style='color: #00d4aa;'>→</span> <span style='color: #ffffff;'>For aviation info run </span><span style='color: #ff9800; background: rgba(255, 152, 0, 0.1); padding: 2px 6px; border-radius: 3px;'>'avgeek'</span>",
-            
-            skills: "<span style='color: #ffffff;'>I'm skilled in:</span><br><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF7043; font-weight: bold;'>BAT & Shell Scripting</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #1E90FF; font-weight: bold;'>C#</span> <span style='color: #888;'>(.NET Framework)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF6347; font-weight: bold;'>Rust</span> <span style='color: #888;'>(Systems Programming)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #5F9EA0; font-weight: bold;'>Lua</span> <span style='color: #888;'>(Scripting)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #F5F5F5; font-weight: bold;'>HTML & CSS</span> <span style='color: #888;'>(Web Development)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #B0E0E6; font-weight: bold;'>TypeScript</span> <span style='color: #888;'>(Type-safe JS)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF8C00; font-weight: bold;'>JavaScript</span> <span style='color: #888;'>(Frontend/Backend)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FF8C69; font-weight: bold;'>Java</span> <span style='color: #888;'>(Enterprise)</span><br><span style='color: #ff6b9d;'>●</span> <span style='color: #FFFF33; font-weight: bold;'>Python</span> <span style='color: #00d4aa; font-weight: bold;'>(Primary Language)</span>",
-            
-            avgeek: "<span style='color: #ffffff;'>I'm an </span><span style='color: #ffeb3b; font-weight: bold;'>AvGeek</span><span style='color: #ffffff;'> - I love planes and aviation in general!</span><br><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Flight simulation enthusiast</span><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Extensive knowledge of aircraft systems</span><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Aviation industry follower</span><br><span style='color: #4fc3f7;'>✈️</span> <span style='color: #ffffff;'>Multiple flight sim platforms</span>",
-            
-            github: "<span style='color: #ffeb3b;'>⚠️</span> <span style='color: #ffffff;'>Keep in mind that </span><span style='color: #ff6b9d; font-weight: bold;'>98%</span><span style='color: #ffffff;'> of my projects are private</span><br><span style='color: #ffffff;'>But I'm working towards open sourcing them!</span><br><br><a href='https://github.com/JadXV' target='_blank' class='modern-link'>🔗 My GitHub Profile</a>",
-            
-            socials: "<span style='color: #9c27b0;'>💬</span> <span style='color: #ffffff;'>Discord: </span><span style='color: #5865f2; font-weight: bold; background: rgba(88, 101, 242, 0.1); padding: 2px 6px; border-radius: 3px;'>@JadXV.</span> <span style='color: #888;'>(with the dot)</span><br><br><span style='color: #ffffff;'>Other platforms:</span><br><span style='color: #ff6b9d;'>●</span> <a href='https://www.youtube.com/@jadxvx' target='_blank' class='modern-link youtube'>📺 YouTube</a><br><span style='color: #ff6b9d;'>●</span> <a href='https://x.com/JadXvX' target='_blank' class='modern-link twitter'>🐦 Twitter/X</a><br><span style='color: #ff6b9d;'>●</span> <a href='https://www.roblox.com/users/1167933334/profile' target='_blank' class='modern-link roblox'>🎮 Roblox</a>",
-            
-            achievements: "<span style='color: #ffffff;'>My competition achievements:</span><br><br><span style='color: #ffd700;'>🎖️</span> <span style='color: #FF6B35; font-weight: bold; font-size: 1.1em;'>High Placing Member</span><br><span style='color: #ffffff;'>   </span><span style='color: #FF6B35; font-weight: bold;'>SpurHacks 2025</span><span style='color: #ffffff;'> - Biggest hackathon in Ontario</span><br><br><span style='color: #ffd700;'>🏆</span> <span style='color: #FFECA1; font-weight: bold; font-size: 1.1em;'>1st Place Winner</span><br><span style='color: #ffffff;'>   </span><span style='color: #9101BA; font-weight: bold;'>StackHacks</span><span style='color: #ffffff;'> Hackathon</span><br><br><span style='color: #4fc3f7;'>🎯</span> <span style='color: #ffffff;'>Multiple hackathon participations</span><br><span style='color: #4fc3f7;'>🎯</span> <span style='color: #ffffff;'>Various coding competitions</span><br><br><span style='color: #888;'>For more details run </span><span style='color: #ff9800; background: rgba(255, 152, 0, 0.1); padding: 2px 6px; border-radius: 3px;'>'github'</span>",
-            
-            projects: "<span style='color: #ffeb3b;'>🚧</span> <span style='color: #ffffff;'>Working on open sourcing my projects</span><br><span style='color: #4fc3f7;'>👀</span> <span style='color: #ffffff;'>Keep an eye on my GitHub for updates</span><br><span style='color: #ff6b9d;'>📊</span> <span style='color: #ffffff;'>Various tools and applications in development</span>",
-            
-            cls: "Clears the terminal screen",
-            help: "Gives a list of available commands",
-        };
 
+    <script>
+        let taskbarAnimationStarted = false;
+        let animationComplete = false;
+        let skipKeyPressCount = 0;
+        let animationTimeouts = [];
+        let commandsran = [];
+        let isDragging = false;
+        let isResizing = false;
+        let offsetX, offsetY;
+        let originalDimensions = { width: '80%', height: '80%', left: '10%', top: '10%' };
+
+        const terminal = document.getElementById('terminal');
         const input = document.getElementById('input');
         const outputContainer = document.getElementById('output-container');
-        const terminal = document.getElementById('terminal');
-        
+        const topbar = document.getElementById('topbar');
+        const taskbar = document.querySelector('.taskbar');
+        const cursor = document.getElementById('cursor');
+        const cmdIcon = document.getElementById('cmdIcon');
+
+        const commands = {
+            whoami: "<span style='color:#fff'>My name is </span><span style='color:#ff6b9d;font-weight:bold'>Jad</span><span style='color:#fff'>, I go by the alias </span><span style='color:#4fc3f7;font-weight:bold'>JadXV</span><span style='color:#fff'>.</span><br><span style='color:#fff'>I'm an </span><span style='color:#ffeb3b;font-weight:bold'>AvGeek</span><span style='color:#fff'> and </span><span style='color:#9c27b0;font-weight:bold'>programmer</span><span style='color:#fff'> in various languages.</span><br><br><span style='color:#00d4aa'>→</span> <span style='color:#fff'>Find out what I code in by running </span><span style='color:#ff9800;background:rgba(255,152,0,.1);padding:2px 6px;border-radius:3px'>'skills'</span><br><span style='color:#00d4aa'>→</span> <span style='color:#fff'>For aviation info run </span><span style='color:#ff9800;background:rgba(255,152,0,.1);padding:2px 6px;border-radius:3px'>'avgeek'</span>",
+            skills: "<span style='color:#fff'>I'm skilled in:</span><br><br><span style='color:#ff6b9d'>●</span> <span style='color:#FF7043;font-weight:bold'>BAT & Shell Scripting</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#1E90FF;font-weight:bold'>C#</span> <span style='color:#888'>(.NET Framework)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#FF6347;font-weight:bold'>Rust</span> <span style='color:#888'>(Systems Programming)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#5F9EA0;font-weight:bold'>Lua</span> <span style='color:#888'>(Scripting)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#F5F5F5;font-weight:bold'>HTML & CSS</span> <span style='color:#888'>(Web Development)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#B0E0E6;font-weight:bold'>TypeScript</span> <span style='color:#888'>(Type-safe JS)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#FF8C00;font-weight:bold'>JavaScript</span> <span style='color:#888'>(Frontend/Backend)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#FF8C69;font-weight:bold'>Java</span> <span style='color:#888'>(Enterprise)</span><br><span style='color:#ff6b9d'>●</span> <span style='color:#FFFF33;font-weight:bold'>Python</span> <span style='color:#888'>(Automation & Scripting)</span>",
+            avgeek: "<span style='color:#fff'>I'm an </span><span style='color:#ffeb3b;font-weight:bold'>AvGeek</span><span style='color:#fff'> - I love planes and aviation in general!</span><br><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Flight simulation enthusiast</span><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Extensive knowledge of aircraft systems</span><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Aviation industry follower</span><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Multiple flight sim platforms</span>",
+            github: "<span style='color:#ffeb3b'>*</span> <span style='color:#fff'>Keep in mind that </span><span style='color:#ff6b9d;font-weight:bold'>98%</span><span style='color:#fff'> of my projects are private</span><br><span style='color:#fff'>But I'm working towards open sourcing them!</span><br><br><a href='https://github.com/JadXV' target='_blank' class='modern-link'>My GitHub Profile</a>",
+            socials: "<span style='color:#9c27b0'>></span> <span style='color:#fff'>Discord: </span><span style='color:#5865f2;font-weight:bold;background:rgba(88,101,242,.1);padding:2px 6px;border-radius:3px'>@JadXV.</span> <span style='color:#888'>(with the dot)</span><br><br><span style='color:#fff'>Other platforms:</span><br><span style='color:#ff6b9d'>●</span> <a href='https://www.youtube.com/@jadxvx' target='_blank' class='modern-link youtube'>YouTube</a><br><span style='color:#ff6b9d'>●</span> <a href='https://x.com/JadXvX' target='_blank' class='modern-link twitter'>Twitter/X</a><br><span style='color:#ff6b9d'>●</span> <a href='https://devpost.com/JadXV' target='_blank' class='modern-link devpost'>Devpost</a>",
+            achievements: "<span style='color:#fff'>My competition achievements:</span><br><br><span style='color:#ffd700'>*</span> <span style='color:#FF6B35;font-weight:bold;font-size:1.1em'>High Placing Member</span><br><span style='color:#fff'>   </span><span style='color:#FF6B35;font-weight:bold'>SpurHacks 2025</span><span style='color:#fff'> - Biggest hackathon in Ontario</span><br><br><span style='color:#ffd700'>*</span> <span style='color:#FFECA1;font-weight:bold;font-size:1.1em'>1st Place Winner</span><br><span style='color:#fff'>   </span><span style='color:#9101BA;font-weight:bold'>StackHacks</span><span style='color:#fff'> Hackathon</span><br><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Multiple hackathon participations</span><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Various coding competitions</span><br><br><a href='https://devpost.com/JadXV' target='_blank' class='modern-link devpost'>View hackathon participations</a><br><br><span style='color:#888'>For more details run </span><span style='color:#ff9800;background:rgba(255,152,0,.1);padding:2px 6px;border-radius:3px'>'github'</span>",
+            projects: "<span style='color:#ffeb3b'>*</span> <span style='color:#fff'>Working on open sourcing my projects</span><br><span style='color:#4fc3f7'>></span> <span style='color:#fff'>Keep an eye on my GitHub for updates</span><br><span style='color:#ff6b9d'>></span> <span style='color:#fff'>Various tools and applications in development</span>",
+            cls: "Clears the terminal screen",
+            help: "Gives a list of available commands"
+        };
+
         function isMobile() {
             return window.innerWidth <= 768 || /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         }
-        
-        function showMobileNotice() {
-            if (isMobile()) {
-                document.getElementById('mobile-notice').style.display = 'flex';
-            }
+
+        function skipAnimation() {
+            animationTimeouts.forEach(t => clearTimeout(t));
+            animationTimeouts = [];
+            const skipMsg = document.getElementById('skip-animation-message');
+            if (skipMsg) skipMsg.remove();
+            taskbar.classList.remove('show');
+            taskbar.classList.add('hide');
+            cursor.classList.remove('show');
+            cmdIcon.classList.add('active');
+            terminal.style.display = 'flex';
+            terminal.style.opacity = '1';
+            terminal.style.transform = 'scale(1)';
+            const rect = terminal.getBoundingClientRect();
+            terminal.style.left = `${(window.innerWidth - rect.width) / 2}px`;
+            terminal.style.top = `${(window.innerHeight - rect.height) / 2}px`;
+            if (input) input.focus();
+            animationComplete = true;
         }
-        
+
+        function showSkipMessage(remaining) {
+            let skipDiv = document.getElementById('skip-animation-message');
+            if (!skipDiv) {
+                skipDiv = document.createElement('div');
+                skipDiv.id = 'skip-animation-message';
+                skipDiv.style = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);font-family:monospace;color:white;text-align:center;background:rgba(0,0,0,.7);padding:10px 20px;border-radius:8px;z-index:10001';
+                document.body.appendChild(skipDiv);
+            }
+            skipDiv.innerHTML = `Press ${remaining} more key${remaining > 1 ? 's' : ''} to skip animation`;
+        }
+
+        document.addEventListener('keydown', function skipListener(e) {
+            if (animationComplete) {
+                document.removeEventListener('keydown', skipListener);
+                return;
+            }
+            skipKeyPressCount++;
+            if (skipKeyPressCount < 3) {
+                showSkipMessage(3 - skipKeyPressCount);
+            } else {
+                skipAnimation();
+                document.removeEventListener('keydown', skipListener);
+            }
+        });
+
+        function startTaskbarAnimation() {
+            if (taskbarAnimationStarted) return;
+            taskbarAnimationStarted = true;
+
+            animationTimeouts.push(setTimeout(() => taskbar.classList.add('show'), 0));
+
+            animationTimeouts.push(setTimeout(() => {
+                const iconRect = cmdIcon.getBoundingClientRect();
+                const targetX = iconRect.left + iconRect.width / 2;
+                const targetY = iconRect.top + iconRect.height / 2;
+                cursor.style.left = '50%';
+                cursor.style.top = '50%';
+                cursor.style.transition = 'opacity .3s ease-in-out, left 1.5s ease-in-out, top 1.5s ease-in-out';
+                cursor.classList.add('show');
+                animationTimeouts.push(setTimeout(() => {
+                    cursor.style.left = targetX + 'px';
+                    cursor.style.top = targetY + 'px';
+                }, 100));
+            }, 800));
+
+            animationTimeouts.push(setTimeout(() => cmdIcon.classList.add('active'), 2500));
+
+            animationTimeouts.push(setTimeout(() => {
+                terminal.style.display = 'flex';
+                terminal.style.opacity = '0';
+                terminal.style.transition = 'all .3s cubic-bezier(.25,.46,.45,.94)';
+                const rect = terminal.getBoundingClientRect();
+                const centerX = (window.innerWidth - rect.width) / 2;
+                const centerY = (window.innerHeight - rect.height) / 2;
+                terminal.style.left = `${centerX}px`;
+                terminal.style.top = `${centerY}px`;
+                terminal.style.transform = 'scale(.7)';
+                animationTimeouts.push(setTimeout(() => {
+                    terminal.style.opacity = '1';
+                    terminal.style.transform = 'scale(1)';
+                }, 10));
+            }, 2800));
+
+            animationTimeouts.push(setTimeout(() => {
+                cursor.classList.remove('show');
+                taskbar.classList.remove('show');
+                taskbar.classList.add('hide');
+            }, 3500));
+
+            animationTimeouts.push(setTimeout(() => {
+                if (input) input.focus();
+                animationComplete = true;
+                const skipMsg = document.getElementById('skip-animation-message');
+                if (skipMsg) skipMsg.remove();
+            }, 3800));
+        }
+
+        function updateTaskbarClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12 || 12;
+            const timeEl = document.getElementById('taskbar-time');
+            const dateEl = document.getElementById('taskbar-date');
+            if (timeEl) timeEl.textContent = `${hours}:${minutes} ${ampm}`;
+            if (dateEl) dateEl.textContent = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`;
+        }
+
+        function showMobileNotice() {
+            if (isMobile()) document.getElementById('mobile-notice').style.display = 'flex';
+        }
+
         function dismissMobileNotice() {
             const notice = document.getElementById('mobile-notice');
-            notice.style.animation = 'fadeOut 0.3s ease-out forwards';
+            notice.style.animation = 'fadeOut .3s ease-out forwards';
             setTimeout(() => {
                 notice.style.display = 'none';
                 input.focus();
             }, 300);
         }
-        
+
         const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fadeOut {
-                from { opacity: 1; }
-                to { opacity: 0; }
-            }
-        `;
+        style.textContent = '@keyframes fadeOut{from{opacity:1}to{opacity:0}}';
         document.head.appendChild(style);
-        
-        // Allow dismissing by clicking outside the content
+
         document.getElementById('mobile-notice')?.addEventListener('click', function(e) {
-            if (e.target === this) {
-                dismissMobileNotice();
-            }
+            if (e.target === this) dismissMobileNotice();
         });
-        
+
         window.addEventListener('load', () => {
             showMobileNotice();
             if (!terminal.style.left) terminal.style.left = '10%';
             if (!terminal.style.top) terminal.style.top = '10%';
+            if (!isMobile()) {
+                startTaskbarAnimation();
+                updateTaskbarClock();
+                setInterval(updateTaskbarClock, 1000);
+            } else {
+                terminal.style.display = 'flex';
+            }
         });
-        
-        let originalDimensions = { width: '80%', height: '80%', left: '10%', top: '10%' };
-        let isDragging = false, isResizing = false, offsetX, offsetY;
 
         document.querySelectorAll('.button').forEach(button => {
             button.addEventListener('click', function() {
@@ -460,31 +795,27 @@
                     }
                 } else if (button.innerText === '-' || button.innerText === '×') {
                     terminal.classList.add('minimized');
-                    
                     setTimeout(() => {
                         terminal.style.display = 'none';
                         if (!document.getElementById('reopen-message')) {
                             const reopenDiv = document.createElement('div');
                             reopenDiv.id = 'reopen-message';
-                            reopenDiv.style = 'font-family: monospace; color: white; text-align: center; margin-top: 20vh; cursor: pointer;';
+                            reopenDiv.style = 'font-family:monospace;color:white;text-align:center;margin-top:20vh;cursor:pointer';
                             reopenDiv.innerHTML = "You've closed/minimized my portfolio, press anywhere to reopen";
                             document.body.appendChild(reopenDiv);
-                            
                             document.body.addEventListener('click', function reopenListener() {
                                 const reopenMessage = document.getElementById('reopen-message');
                                 if (reopenMessage) reopenMessage.remove();
-                                
                                 terminal.style.display = 'flex';
                                 setTimeout(() => {
                                     terminal.classList.remove('minimized');
-                                    input.focus(); 
+                                    input.focus();
                                 }, 10);
-                                
                                 document.body.removeEventListener('click', reopenListener);
                             });
                         }
-                    }, 300); 
-                } 
+                    }, 300);
+                }
             });
         });
 
@@ -494,46 +825,43 @@
             if (event.key === 'ArrowUp' && commandsran.length > 0) {
                 event.preventDefault();
                 input.value = commandsran.pop();
-            } else if (event.key == 'Tab') {
+            } else if (event.key === 'Tab') {
                 event.preventDefault();
-                const command = input.value.toLowerCase();
-                const matchingCommands = Object.keys(commands).filter(c => c.startsWith(command));
+                const matchingCommands = Object.keys(commands).filter(c => c.startsWith(input.value.toLowerCase()));
                 if (matchingCommands.length === 1) input.value = matchingCommands[0];
             } else if (event.key === 'Enter') {
                 const commandInput = input.value;
-                const command = commandInput.toLowerCase(); 
-                
-                if (commands[command]) {
-                    if (command === 'cls') {
-                        while (outputContainer.children.length > 1) {
-                            outputContainer.removeChild(outputContainer.children[0]);
-                        }
-                        input.value = '';
-                        return; 
+                const command = commandInput.toLowerCase();
+
+                if (command === 'cls') {
+                    while (outputContainer.children.length > 1) {
+                        outputContainer.removeChild(outputContainer.children[0]);
                     }
+                    input.value = '';
+                    return;
                 }
-                
+
                 const newOutput = document.createElement('div');
                 newOutput.classList.add('command-line');
                 newOutput.innerHTML = `<span class="prompt">C:\\Users\\JadXV></span> ${commandInput}`;
-                
+
                 const commandResult = document.createElement('div');
                 commandResult.classList.add('command-output');
                 commandsran.push(commandInput);
-                
+
                 if (commands[command]) {
                     if (command === 'help') {
-                        commandResult.innerHTML = "<span style='color: #ffffff;'>Here are all the commands you can use:</span><br><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #4fc3f7; font-weight: bold;'>whoami</span> <span style='color: #888;'>- Learn more about me</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ffeb3b; font-weight: bold;'>skills</span> <span style='color: #888;'>- View programming languages & skills</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ff9800; font-weight: bold;'>avgeek</span> <span style='color: #888;'>- Aviation enthusiasm & flight sim</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #9c27b0; font-weight: bold;'>github</span> <span style='color: #888;'>- View GitHub profile</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #00d4aa; font-weight: bold;'>socials</span> <span style='color: #888;'>- Social media & contact info</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ffd700; font-weight: bold;'>achievements</span> <span style='color: #888;'>- Hackathons & competitions</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #ff6347; font-weight: bold;'>projects</span> <span style='color: #888;'>- Current development work</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #b0b0b0; font-weight: bold;'>cls</span> <span style='color: #888;'>- Clear the terminal screen</span><br>" +
-                            "<span style='color: #ff6b9d;'>●</span> <span style='color: #e91e63; font-weight: bold;'>help</span> <span style='color: #888;'>- Show this help menu</span><br><br>" +
-                            "<span style='color: #888;'>💡 Tip: Use Tab for command auto-completion!</span>";
+                        commandResult.innerHTML = "<span style='color:#fff'>Here are all the commands you can use:</span><br><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#4fc3f7;font-weight:bold'>whoami</span> <span style='color:#888'>- Learn more about me</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#ffeb3b;font-weight:bold'>skills</span> <span style='color:#888'>- View programming languages & skills</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#ff9800;font-weight:bold'>avgeek</span> <span style='color:#888'>- Aviation enthusiasm & flight sim</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#9c27b0;font-weight:bold'>github</span> <span style='color:#888'>- View GitHub profile</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#00d4aa;font-weight:bold'>socials</span> <span style='color:#888'>- Social media & contact info</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#ffd700;font-weight:bold'>achievements</span> <span style='color:#888'>- Hackathons & competitions</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#ff6347;font-weight:bold'>projects</span> <span style='color:#888'>- Current development work</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#b0b0b0;font-weight:bold'>cls</span> <span style='color:#888'>- Clear the terminal screen</span><br>" +
+                            "<span style='color:#ff6b9d'>●</span> <span style='color:#e91e63;font-weight:bold'>help</span> <span style='color:#888'>- Show this help menu</span><br><br>" +
+                            "<span style='color:#888'>Tip: Use Tab for command auto-completion!</span>";
                     } else {
                         commandResult.innerHTML = commands[command];
                     }
@@ -542,7 +870,7 @@
                 } else {
                     commandResult.innerHTML = `<span class="error">'${commandInput}' is not recognized as an internal or external command,<br>operable program or batch file.<br><br>Type 'help' to see available commands</span>`;
                 }
-                
+
                 outputContainer.insertBefore(newOutput, input.parentElement);
                 outputContainer.insertBefore(commandResult, input.parentElement);
                 outputContainer.insertBefore(document.createElement('br'), input.parentElement);
@@ -551,52 +879,33 @@
             }
         });
 
-        const topbar = document.getElementById('topbar');
-
-        window.addEventListener('load', () => {
-            if (!terminal.style.left) terminal.style.left = '10%';
-            if (!terminal.style.top) terminal.style.top = '10%';
-        });
-
         topbar.addEventListener('mousedown', function(event) {
-            if (event.button !== 0) return;
-            if (isMobile()) return; 
-            
+            if (event.button !== 0 || isMobile()) return;
             event.preventDefault();
             isDragging = true;
-            
             const terminalRect = terminal.getBoundingClientRect();
             offsetX = event.clientX - terminalRect.left;
             offsetY = event.clientY - terminalRect.top;
-            
             terminal.classList.add('dragging');
         });
 
         topbar.addEventListener('dblclick', function() {
             if (terminal.classList.contains('maximized') || isMobile()) return;
-            
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
             const terminalRect = terminal.getBoundingClientRect();
-            
-            terminal.style.transition = 'all 0.3s ease-out';
-            terminal.style.left = `${(windowWidth - terminalRect.width) / 2}px`;
-            terminal.style.top = `${(windowHeight - terminalRect.height) / 2}px`;
-            
-            setTimeout(() => terminal.style.transition = 'all 0.3s ease-in-out', 300);
+            terminal.style.transition = 'all .3s ease-out';
+            terminal.style.left = `${(window.innerWidth - terminalRect.width) / 2}px`;
+            terminal.style.top = `${(window.innerHeight - terminalRect.height) / 2}px`;
+            setTimeout(() => terminal.style.transition = 'all .3s ease-in-out', 300);
         });
 
         document.addEventListener('mousemove', function(event) {
             if (isDragging && !terminal.classList.contains('maximized')) {
                 let newLeft = event.clientX - offsetX;
                 let newTop = event.clientY - offsetY;
-                
                 const terminalRect = terminal.getBoundingClientRect();
                 const minVisible = 50;
-                
                 newLeft = Math.max(-terminalRect.width + minVisible, Math.min(newLeft, window.innerWidth - minVisible));
                 newTop = Math.max(0, Math.min(newTop, window.innerHeight - minVisible));
-                
                 terminal.style.transition = 'none';
                 terminal.style.left = `${newLeft}px`;
                 terminal.style.top = `${newTop}px`;
@@ -607,7 +916,7 @@
             if (isDragging) {
                 isDragging = false;
                 terminal.classList.remove('dragging');
-                terminal.style.transition = 'all 0.3s ease-in-out';
+                terminal.style.transition = 'all .3s ease-in-out';
             }
         });
 
@@ -615,45 +924,37 @@
             if (isDragging) {
                 isDragging = false;
                 terminal.classList.remove('dragging');
-                terminal.style.transition = 'all 0.3s ease-in-out';
+                terminal.style.transition = 'all .3s ease-in-out';
             }
         });
 
         document.querySelector('.resize-handle').addEventListener('mousedown', function(event) {
             if (terminal.classList.contains('maximized') || isMobile()) return;
-            
             event.preventDefault();
             isResizing = true;
-            
             const startX = event.clientX;
             const startY = event.clientY;
             const startWidth = terminal.offsetWidth;
             const startHeight = terminal.offsetHeight;
-            
+
             function resize(e) {
                 if (!isResizing) return;
-                
                 terminal.style.transition = 'none';
-                
-                const width = startWidth + (e.clientX - startX);
-                const height = startHeight + (e.clientY - startY);
-                
                 const minWidth = parseInt(getComputedStyle(terminal).minWidth) || 250;
                 const minHeight = parseInt(getComputedStyle(terminal).minHeight) || 200;
-                
-                terminal.style.width = `${Math.max(minWidth, width)}px`;
-                terminal.style.height = `${Math.max(minHeight, height)}px`;
+                terminal.style.width = `${Math.max(minWidth, startWidth + (e.clientX - startX))}px`;
+                terminal.style.height = `${Math.max(minHeight, startHeight + (e.clientY - startY))}px`;
             }
-            
+
             function stopResize() {
                 if (isResizing) {
                     isResizing = false;
-                    setTimeout(() => terminal.style.transition = 'all 0.3s ease-in-out', 50);
+                    setTimeout(() => terminal.style.transition = 'all .3s ease-in-out', 50);
                     document.removeEventListener('mousemove', resize);
                     document.removeEventListener('mouseup', stopResize);
                 }
             }
-            
+
             document.addEventListener('mousemove', resize);
             document.addEventListener('mouseup', stopResize);
         });
