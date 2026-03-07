@@ -190,6 +190,7 @@
             z-index: 1000;
             user-select: none;
             height: 30px;
+            flex-shrink: 0;
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
             border-bottom: 1px solid #232323;
@@ -349,18 +350,29 @@
             -ms-user-select: none;
         }
 
-        .clock-widget {
+        .sidebar {
             position: fixed;
             top: 20px;
             left: 20px;
+            bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .clock-widget {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
             padding: 24px 28px;
             display: flex;
             gap: 25px;
-            z-index: 1;
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            user-select: none;
+            -webkit-user-select: none;
+            flex-shrink: 0;
         }
 
         .clock-item {
@@ -483,16 +495,14 @@
         }
 
         .github-widget {
-            position: fixed;
-            top: 260px;
-            left: 20px;
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
             padding: 24px 28px;
-            z-index: 1;
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            width: 225px;
+            user-select: none;
+            -webkit-user-select: none;
+            flex-shrink: 0;
         }
 
         .github-header {
@@ -599,20 +609,19 @@
         }
 
         .socials-widget {
-            position: fixed;
-            top: 597px;
-            bottom: 20px;
-            left: 20px;
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
             padding: 24px 28px;
-            z-index: 1;
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            width: 225px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+            flex: 1;
+            min-height: 0;
         }
 
         .socials-header {
@@ -640,11 +649,7 @@
         .socials-list {
             display: flex;
             flex-direction: column;
-            gap: 6px;
-            flex: 1;
-            overflow: hidden;
-            min-height: 0;
-            justify-content: space-evenly;
+            gap: clamp(6px, 1.2vh, 12px);
         }
 
         .social-item {
@@ -656,8 +661,7 @@
             border-radius: 10px;
             text-decoration: none;
             transition: background 0.2s ease;
-            flex-shrink: 1;
-            min-height: 0;
+            flex-shrink: 0;
         }
 
         .social-item:hover {
@@ -697,9 +701,7 @@
         }
 
         @media (max-width: 768px) {
-            .clock-widget,
-            .github-widget,
-            .socials-widget {
+            .sidebar {
                 display: none;
             }
         }
@@ -857,6 +859,7 @@
         </article>
     </main>
     
+    <div class="sidebar">
     <div class="clock-widget">
         <div class="clock-item">
             <div class="clock-face" id="toronto-clock">
@@ -985,6 +988,7 @@
                 </div>
             </a>
         </div>
+    </div>
     </div>
 
     <div id="mobile-notice" class="mobile-notice" style="display:none">
@@ -1227,11 +1231,12 @@
                         Object.assign(terminal.style, originalDimensions);
                         setTimeout(updateTerminalSize, 350);
                     } else {
+                        const rect = terminal.getBoundingClientRect();
                         originalDimensions = {
-                            width: terminal.style.width || '80%',
-                            height: terminal.style.height || '80%',
-                            left: terminal.style.left || '10%',
-                            top: terminal.style.top || '10%'
+                            width: terminal.style.width || rect.width + 'px',
+                            height: terminal.style.height || rect.height + 'px',
+                            left: terminal.style.left || rect.left + 'px',
+                            top: terminal.style.top || rect.top + 'px'
                         };
                         terminal.classList.add('maximized');
                         terminal.style.width = '100%';
