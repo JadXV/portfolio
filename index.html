@@ -136,42 +136,38 @@
             background-color: #1e1e1e;
             border: 1px solid rgba(113, 111, 114, 0.25);
             padding: 0;
-            width: calc(100% - 340px);
-            height: calc(100% - 40px);
             display: none;
             flex-direction: column;
-            position: absolute;
+            position: relative;
             resize: none;
             box-sizing: border-box;
             overflow: hidden;
             border-radius: 10px;
             min-width: 25%;
             min-height: 25%;
-            max-width: 100%;
-            max-height: 100%;
+            flex: 1;
+            height: 100%;
             transition: all .3s ease-in-out;
             transform-origin: center;
-            top: 20px;
-            left: 320px;
-            right: 20px;
             box-shadow: 0 25px 50px rgba(0,0,0,.5);
             z-index: 10;
         }
 
         #terminal.minimized {
-            transform: scale(.1);
+            transform: scale(.1) !important;
             opacity: 0;
-            top: 100%;
-            left: 50%;
             pointer-events: none;
         }
 
         #terminal.maximized {
-            width: 100%;
-            height: 100%;
+            position: fixed;
+            width: 100% !important;
+            height: 100% !important;
             left: 0;
             top: 0;
+            transform: none !important;
             border-radius: 0;
+            z-index: 100;
         }
 
         #topbar {
@@ -350,26 +346,34 @@
             -ms-user-select: none;
         }
 
+        .layout-wrapper {
+            display: flex;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            transform-origin: center center;
+            transition: transform 0.15s ease;
+        }
+
         .sidebar {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            bottom: 20px;
             display: flex;
             flex-direction: column;
             gap: 16px;
             z-index: 1;
             overflow: hidden;
+            flex-shrink: 0;
+            max-height: 100%;
         }
 
         .clock-widget {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
-            padding: 24px 28px;
+            padding: clamp(16px, 2.5vh, 24px) clamp(20px, 2vw, 28px);
             display: flex;
-            gap: 25px;
+            gap: clamp(16px, 2vw, 25px);
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             user-select: none;
             -webkit-user-select: none;
             flex-shrink: 0;
@@ -383,8 +387,8 @@
         }
 
         .clock-face {
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
             background: #f5f5f5;
             position: relative;
@@ -418,18 +422,18 @@
             transform: translate(-50%, -50%);
         }
 
-        .clock-number.n12 { top: 12px; left: 50px; }
-        .clock-number.n1 { top: 17px; left: 69px; }
-        .clock-number.n2 { top: 31px; left: 83px; }
-        .clock-number.n3 { top: 50px; left: 88px; }
-        .clock-number.n4 { top: 69px; left: 83px; }
-        .clock-number.n5 { top: 83px; left: 69px; }
-        .clock-number.n6 { top: 88px; left: 50px; }
-        .clock-number.n7 { top: 83px; left: 31px; }
-        .clock-number.n8 { top: 69px; left: 17px; }
-        .clock-number.n9 { top: 50px; left: 12px; }
-        .clock-number.n10 { top: 31px; left: 17px; }
-        .clock-number.n11 { top: 17px; left: 31px; }
+        .clock-number.n12 { top: 11px; left: 45px; }
+        .clock-number.n1 { top: 15px; left: 62px; }
+        .clock-number.n2 { top: 28px; left: 75px; }
+        .clock-number.n3 { top: 45px; left: 79px; }
+        .clock-number.n4 { top: 62px; left: 75px; }
+        .clock-number.n5 { top: 75px; left: 62px; }
+        .clock-number.n6 { top: 79px; left: 45px; }
+        .clock-number.n7 { top: 75px; left: 28px; }
+        .clock-number.n8 { top: 62px; left: 15px; }
+        .clock-number.n9 { top: 45px; left: 11px; }
+        .clock-number.n10 { top: 28px; left: 15px; }
+        .clock-number.n11 { top: 15px; left: 28px; }
 
         .clock-center {
             position: absolute;
@@ -454,7 +458,7 @@
 
         .hour-hand {
             width: 4px;
-            height: 24px;
+            height: 20px;
             background: #000;
             margin-left: -2px;
             z-index: 3;
@@ -462,7 +466,7 @@
 
         .minute-hand {
             width: 3px;
-            height: 34px;
+            height: 28px;
             background: #000;
             margin-left: -1.5px;
             z-index: 2;
@@ -470,7 +474,7 @@
 
         .second-hand {
             width: 1.5px;
-            height: 38px;
+            height: 32px;
             background: #f5a623;
             margin-left: -0.75px;
             z-index: 4;
@@ -497,9 +501,8 @@
         .github-widget {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
-            padding: 24px 28px;
+            padding: clamp(14px, 2vh, 24px) clamp(18px, 2vw, 28px);
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             user-select: none;
             -webkit-user-select: none;
             flex-shrink: 0;
@@ -611,9 +614,8 @@
         .socials-widget {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
-            padding: 24px 28px;
+            padding: clamp(14px, 2vh, 24px) clamp(18px, 2vw, 28px);
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
             display: flex;
             flex-direction: column;
             overflow-y: auto;
@@ -627,15 +629,15 @@
         .socials-header {
             display: flex;
             align-items: center;
-            gap: 12px;
-            margin-bottom: 12px;
-            padding-bottom: 12px;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .socials-avatar {
-            width: 44px;
-            height: 44px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             border: 2px solid rgba(255,255,255,0.2);
         }
@@ -650,18 +652,19 @@
             display: flex;
             flex-direction: column;
             gap: clamp(6px, 1.2vh, 12px);
+            flex: 1;
         }
 
         .social-item {
             display: flex;
             align-items: center;
-            gap: 12px;
-            padding: 10px 12px;
+            gap: 10px;
+            padding: clamp(6px, 1vh, 12px) clamp(8px, 1vw, 14px);
             background: rgba(255,255,255,0.05);
             border-radius: 10px;
             text-decoration: none;
             transition: background 0.2s ease;
-            flex-shrink: 0;
+            flex: 1;
         }
 
         .social-item:hover {
@@ -669,9 +672,9 @@
         }
 
         .social-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 7px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -691,13 +694,13 @@
 
         .social-name {
             color: #fff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 500;
         }
 
         .social-handle {
             color: rgba(255,255,255,0.5);
-            font-size: 12px;
+            font-size: 11px;
         }
 
         @media (max-width: 768px) {
@@ -707,15 +710,15 @@
         }
 
         @media (max-width: 600px) {
-            body { padding: 10px; box-sizing: border-box; }
+            body { padding: 0; box-sizing: border-box; }
+            .layout-wrapper { padding: 10px; flex-direction: column; }
             #terminal {
-                width: 95% !important;
+                width: 100% !important;
                 height: 90% !important;
-                left: 2.5% !important;
-                top: 5% !important;
                 min-width: 95%;
                 min-height: 90%;
                 font-size: 14px;
+                transform: none !important;
             }
             #terminal.maximized {
                 width: 100% !important;
@@ -859,6 +862,7 @@
         </article>
     </main>
     
+    <div class="layout-wrapper">
     <div class="sidebar">
     <div class="clock-widget">
         <div class="clock-item">
@@ -991,15 +995,6 @@
     </div>
     </div>
 
-    <div id="mobile-notice" class="mobile-notice" style="display:none">
-        <div class="mobile-notice-content">
-            <h2>Desktop Recommended</h2>
-            <p>This portfolio is optimized for desktop viewing with interactive features including draggable windows and keyboard navigation.</p>
-            <p>You can continue on mobile, but the full experience is available on desktop.</p>
-            <button class="acknowledge-btn" onclick="dismissMobileNotice()">Continue</button>
-        </div>
-    </div>
-
     <div id="terminal">
         <div id="topbar">
             <div id="window-buttons" class="user-select-none">
@@ -1011,7 +1006,7 @@
         </div>
         <div id="output-container">
             <div class="initial-message" style="color:#c7c7c7;font-family:'SF Mono',Monaco,Menlo,monospace;margin-bottom:10px;font-size:13px">
-                <span style="color:#c7c7c7">Last login: Sun Feb  2 18:49:15 on ttys000</span><br><br>
+                <span style="color:#c7c7c7">Last update: Sun Mar 8 01:54:45 on ttys000</span><br><br>
 <pre style="color:#6ec2e8;margin:0;line-height:1.2;font-size:11px">
      ██╗ █████╗ ██████╗ ██╗  ██╗██╗   ██╗
      ██║██╔══██╗██╔══██╗╚██╗██╔╝██║   ██║
@@ -1033,14 +1028,24 @@
         </div>
         <div class="resize-handle"></div>
     </div>
+    </div>
+
+    <div id="mobile-notice" class="mobile-notice" style="display:none">
+        <div class="mobile-notice-content">
+            <h2>Desktop Recommended</h2>
+            <p>This portfolio is optimized for desktop viewing with interactive features including draggable windows and keyboard navigation.</p>
+            <p>You can continue on mobile, but the full experience is available on desktop.</p>
+            <button class="acknowledge-btn" onclick="dismissMobileNotice()">Continue</button>
+        </div>
+    </div>
 
     <script>
         let animationComplete = true;
         let commandsran = [];
         let isDragging = false;
         let isResizing = false;
-        let offsetX, offsetY;
-        let originalDimensions = { width: '80%', height: '80%', left: '10%', top: '10%' };
+        let dragStartX, dragStartY, dragTranslateX = 0, dragTranslateY = 0, dragStartTransX, dragStartTransY;
+        let originalDimensions = { width: '', height: '', transform: '' };
 
         const terminal = document.getElementById('terminal');
         const input = document.getElementById('input');
@@ -1192,17 +1197,7 @@
             updateClockWidget();
             setInterval(updateWelcomeTimes, 1000);
             setInterval(updateClockWidget, 1000);
-            terminal.style.transition = 'none';
             terminal.style.display = 'flex';
-            const rect = terminal.getBoundingClientRect();
-            const widget = document.querySelector('.clock-widget');
-            const widgetWidth = widget ? widget.offsetWidth + 20 : 0;
-            const availableWidth = window.innerWidth - widgetWidth;
-            terminal.style.left = `${widgetWidth + (availableWidth - rect.width) / 2}px`;
-            terminal.style.top = `${(window.innerHeight - rect.height) / 2}px`;
-            requestAnimationFrame(() => {
-                terminal.style.transition = 'all .3s ease-in-out';
-            });
             if (input) input.focus();
             animationComplete = true;
             updateTerminalSize();
@@ -1228,21 +1223,17 @@
                 if (action === 'maximize') {
                     if (terminal.classList.contains('maximized')) {
                         terminal.classList.remove('maximized');
-                        Object.assign(terminal.style, originalDimensions);
+                        terminal.style.width = originalDimensions.width;
+                        terminal.style.height = originalDimensions.height;
+                        terminal.style.transform = originalDimensions.transform;
                         setTimeout(updateTerminalSize, 350);
                     } else {
-                        const rect = terminal.getBoundingClientRect();
                         originalDimensions = {
-                            width: terminal.style.width || rect.width + 'px',
-                            height: terminal.style.height || rect.height + 'px',
-                            left: terminal.style.left || rect.left + 'px',
-                            top: terminal.style.top || rect.top + 'px'
+                            width: terminal.style.width || '',
+                            height: terminal.style.height || '',
+                            transform: terminal.style.transform || ''
                         };
                         terminal.classList.add('maximized');
-                        terminal.style.width = '100%';
-                        terminal.style.height = '100%';
-                        terminal.style.left = '0';
-                        terminal.style.top = '0';
                         setTimeout(updateTerminalSize, 350);
                     }
                 } else if (action === 'minimize' || action === 'close') {
@@ -1335,35 +1326,28 @@
             if (event.button !== 0 || isMobile()) return;
             event.preventDefault();
             isDragging = true;
-            const terminalRect = terminal.getBoundingClientRect();
-            offsetX = event.clientX - terminalRect.left;
-            offsetY = event.clientY - terminalRect.top;
+            dragStartX = event.clientX;
+            dragStartY = event.clientY;
+            dragStartTransX = dragTranslateX;
+            dragStartTransY = dragTranslateY;
             terminal.classList.add('dragging');
         });
 
         topbar.addEventListener('dblclick', function() {
             if (terminal.classList.contains('maximized') || isMobile()) return;
-            const terminalRect = terminal.getBoundingClientRect();
-            const widget = document.querySelector('.clock-widget');
-            const widgetWidth = widget ? widget.offsetWidth + 20 : 0;
-            const availableWidth = window.innerWidth - widgetWidth;
+            dragTranslateX = 0;
+            dragTranslateY = 0;
             terminal.style.transition = 'all .3s ease-out';
-            terminal.style.left = `${widgetWidth + (availableWidth - terminalRect.width) / 2}px`;
-            terminal.style.top = `${(window.innerHeight - terminalRect.height) / 2}px`;
+            terminal.style.transform = 'translate(0, 0)';
             setTimeout(() => terminal.style.transition = 'all .3s ease-in-out', 300);
         });
 
         document.addEventListener('mousemove', function(event) {
             if (isDragging && !terminal.classList.contains('maximized')) {
-                let newLeft = event.clientX - offsetX;
-                let newTop = event.clientY - offsetY;
-                const terminalRect = terminal.getBoundingClientRect();
-                const minVisible = 50;
-                newLeft = Math.max(-terminalRect.width + minVisible, Math.min(newLeft, window.innerWidth - minVisible));
-                newTop = Math.max(0, Math.min(newTop, window.innerHeight - minVisible));
+                dragTranslateX = dragStartTransX + (event.clientX - dragStartX);
+                dragTranslateY = dragStartTransY + (event.clientY - dragStartY);
                 terminal.style.transition = 'none';
-                terminal.style.left = `${newLeft}px`;
-                terminal.style.top = `${newTop}px`;
+                terminal.style.transform = `translate(${dragTranslateX}px, ${dragTranslateY}px)`;
             }
         });
 
@@ -1413,6 +1397,42 @@
             document.addEventListener('mousemove', resize);
             document.addEventListener('mouseup', stopResize);
         });
+
+        let currentScale = 1;
+        const layoutWrapper = document.querySelector('.layout-wrapper');
+
+        document.addEventListener('keydown', function(e) {
+            if (!(e.metaKey || e.ctrlKey)) return;
+            if (e.key === '=' || e.key === '+') {
+                e.preventDefault();
+                currentScale = Math.min(currentScale + 0.1, 1);
+                layoutWrapper.style.transform = currentScale === 1 ? '' : `scale(${currentScale})`;
+                setTimeout(updateTerminalSize, 200);
+            } else if (e.key === '-') {
+                e.preventDefault();
+                currentScale = Math.max(currentScale - 0.1, 0.3);
+                layoutWrapper.style.transform = `scale(${currentScale})`;
+                setTimeout(updateTerminalSize, 200);
+            } else if (e.key === '0') {
+                e.preventDefault();
+                currentScale = 1;
+                layoutWrapper.style.transform = '';
+                setTimeout(updateTerminalSize, 200);
+            }
+        });
+
+        document.addEventListener('wheel', function(e) {
+            if (e.ctrlKey || e.metaKey) {
+                e.preventDefault();
+                if (e.deltaY < 0) {
+                    currentScale = Math.min(currentScale + 0.05, 1);
+                } else {
+                    currentScale = Math.max(currentScale - 0.05, 0.3);
+                }
+                layoutWrapper.style.transform = currentScale === 1 ? '' : `scale(${currentScale})`;
+                setTimeout(updateTerminalSize, 200);
+            }
+        }, { passive: false });
     </script>
 </body>
 </html>
