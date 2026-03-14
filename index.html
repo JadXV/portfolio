@@ -620,10 +620,18 @@
             flex-direction: column;
             overflow-y: auto;
             overflow-x: hidden;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
             user-select: none;
             -webkit-user-select: none;
             flex: 1;
             min-height: 0;
+        }
+
+        .socials-widget::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            display: none;
         }
 
         .socials-header {
@@ -1054,7 +1062,7 @@
 
         const commands = {
             whoami: "<span style='color:#c7c7c7'>My name is </span><span style='color:#e5c07b'>Jad</span><span style='color:#c7c7c7'>, I go by the alias </span><span style='color:#6ec2e8'>JadXV</span><span style='color:#c7c7c7'>.</span><br><span style='color:#c7c7c7'>I'm an </span><span style='color:#98c379'>AvGeek</span><span style='color:#c7c7c7'> and </span><span style='color:#98c379'>programmer</span><span style='color:#c7c7c7'> in various languages.</span><br><br><span style='color:#7f848e'>-></span> <span style='color:#c7c7c7'>Find out what I code in by running </span><span style='color:#e5c07b'>'skills'</span><br><span style='color:#7f848e'>-></span> <span style='color:#c7c7c7'>For aviation info run </span><span style='color:#e5c07b'>'avgeek'</span>",
-            skills: "<span style='color:#c7c7c7'>I'm skilled in:</span><br><br><span style='color:#6ec2e8'>BAT & Shell Scripting</span><br><span style='color:#6ec2e8'>C#</span> <span style='color:#7f848e'>(.NET Framework)</span><br><span style='color:#6ec2e8'>Rust</span> <span style='color:#7f848e'>(Systems Programming)</span><br><span style='color:#6ec2e8'>Lua</span> <span style='color:#7f848e'>(Scripting)</span><br><span style='color:#6ec2e8'>HTML & CSS</span> <span style='color:#7f848e'>(Web Development)</span><br><span style='color:#6ec2e8'>TypeScript</span> <span style='color:#7f848e'>(Type-safe JS)</span><br><span style='color:#6ec2e8'>JavaScript</span> <span style='color:#7f848e'>(Frontend/Backend)</span><br><span style='color:#6ec2e8'>Java</span> <span style='color:#7f848e'>(Enterprise)</span><br><span style='color:#6ec2e8'>Python</span> <span style='color:#7f848e'>(Automation & Scripting)</span>",
+            skills: "<span style='color:#c7c7c7'>I'm skilled in:</span><br><br><span style='color:#6ec2e8'>BAT & Shell Scripting</span><br><span style='color:#6ec2e8'>C#</span><br><span style='color:#6ec2e8'>Rust</span><br><span style='color:#6ec2e8'>Lua</span><br><span style='color:#6ec2e8'>HTML & CSS</span><br><span style='color:#6ec2e8'>TypeScript</span><br><span style='color:#6ec2e8'>JavaScript</span><br><span style='color:#6ec2e8'>Java</span><br><span style='color:#6ec2e8'>Python</span><br><span style='color:#6ec2e8'>Swift</span>",
             avgeek: "<span style='color:#c7c7c7'>I'm an </span><span style='color:#98c379'>AvGeek</span><span style='color:#c7c7c7'> - I love planes and aviation in general!</span><br><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Flight simulation enthusiast</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Extensive knowledge of aircraft systems</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Aviation industry follower</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Multiple flight sim platforms</span>",
             github: "<span style='color:#c7c7c7'>Keep in mind that </span><span style='color:#e5c07b'>98%</span><span style='color:#c7c7c7'> of my projects are private</span><br><span style='color:#c7c7c7'>But I'm working towards open sourcing them!</span><br><br><a href='https://github.com/JadXV' target='_blank' class='modern-link'>My GitHub Profile</a>",
             socials: "<span style='color:#c7c7c7'>Discord: </span><span style='color:#6ec2e8'>@JadXV.</span> <span style='color:#7f848e'>(with the dot)</span><br><br><span style='color:#c7c7c7'>Other platforms:</span><br><a href='https://www.youtube.com/@jadxvx' target='_blank' class='modern-link youtube'>YouTube</a><br><a href='https://x.com/JadXvX' target='_blank' class='modern-link twitter'>Twitter/X</a><br><a href='https://devpost.com/JadXV' target='_blank' class='modern-link devpost'>Devpost</a>",
@@ -1243,7 +1251,7 @@
                         if (!document.getElementById('reopen-message')) {
                             const reopenDiv = document.createElement('div');
                             reopenDiv.id = 'reopen-message';
-                            reopenDiv.style = 'font-family:monospace;color:white;text-align:center;margin-top:20vh;cursor:pointer';
+                            reopenDiv.style = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:monospace;color:white;text-align:center;cursor:pointer;z-index:10001;padding:24px;box-sizing:border-box;background:transparent';
                             reopenDiv.innerHTML = "You've closed/minimized my portfolio, press anywhere to reopen";
                             document.body.appendChild(reopenDiv);
                             document.body.addEventListener('click', function reopenListener() {
