@@ -4,9 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <title>JadXV | Developer</title>
+    <title>JadXV | Portfolio</title>
     <meta name="title" content="JadXV | Full-Stack Developer & Hackathon Winner | Toronto">
-    <meta name="description" content="Jad (JadXV) is a full-stack developer from Toronto specializing in Python, Rust, TypeScript, Swift, C#, and JavaScript. 1st place StackHacks winner, SpurHacks participant, and aviation enthusiast building innovative software solutions.">
+    <meta name="description" content="Jad (JadXV) is a full-stack developer from Toronto specializing in Python, Rust, TypeScript, Swift, C#, and JavaScript. 2x hackathon winner, SpurHacks participant, and aviation enthusiast building innovative software solutions.">
     <meta name="keywords" content="JadXV, Jad developer, Toronto programmer, full-stack developer, Python developer, Rust developer, TypeScript developer, JavaScript developer, C# developer, Swift developer, hackathon winner, StackHacks 2024, SpurHacks 2025, software engineer, web developer, aviation enthusiast, AvGeek, portfolio, Canada developer">
     <meta name="author" content="Jad (JadXV)">
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
@@ -18,7 +18,7 @@
     <meta property="og:url" content="https://jadxv.dev/">
     <meta property="og:site_name" content="JadXV Portfolio">
     <meta property="og:title" content="JadXV | Full-Stack Developer & Hackathon Winner | Toronto">
-    <meta property="og:description" content="Jad (JadXV) is a full-stack developer from Toronto specializing in Python, Rust, TypeScript, Swift, C#, and JavaScript. 1st place StackHacks winner and aviation enthusiast.">
+    <meta property="og:description" content="Jad (JadXV) is a full-stack developer from Toronto specializing in Python, Rust, TypeScript, Swift, C#, and JavaScript. 2x hackathon winner and aviation enthusiast.">
     <meta property="og:image" content="https://jadxv.dev/icon.png">
     <meta property="og:image:width" content="512">
     <meta property="og:image:height" content="512">
@@ -29,7 +29,7 @@
     <meta name="twitter:site" content="@JadXvX">
     <meta name="twitter:creator" content="@JadXvX">
     <meta name="twitter:title" content="JadXV | Full-Stack Developer & Hackathon Winner | Toronto">
-    <meta name="twitter:description" content="Jad (JadXV) is a full-stack developer from Toronto specializing in Python, Rust, TypeScript, Swift, C#, and JavaScript. 1st place StackHacks winner and aviation enthusiast.">
+    <meta name="twitter:description" content="Jad (JadXV) is a full-stack developer from Toronto specializing in Python, Rust, TypeScript, Swift, C#, and JavaScript. 2x hackathon winner and aviation enthusiast.">
     <meta name="twitter:image" content="https://jadxv.dev/icon.png">
     <meta name="twitter:image:alt" content="JadXV Developer Portfolio Logo">
     
@@ -107,6 +107,7 @@
             background: url('./background.jpeg') no-repeat center center;
             background-attachment: fixed;
             background-size: cover;
+            background-color: #161616;
             position: relative;
             color: #fff;
             font-family: monospace;
@@ -126,9 +127,10 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: inherit;
-            background-attachment: fixed;
+            background: url('./background.jpeg') no-repeat center center;
+            background-size: cover;
             filter: blur(10px);
+            transform: scale(1.1);
             pointer-events: none;
             z-index: -1;
         }
@@ -929,36 +931,11 @@
             <img src="https://avatars.githubusercontent.com/u/87673007?v=4" alt="JadXV" class="github-avatar">
             <div class="github-user-info">
                 <a href="https://github.com/JadXV" target="_blank" class="github-username">JadXV</a>
-                <span class="github-stats">10 repos • 4 followers</span>
+                <span class="github-stats" id="github-stats">Loading…</span>
             </div>
         </div>
         <div class="github-activity-title">Recent Activity</div>
-        <div class="github-activity-list" id="github-activity">
-            <div class="github-activity-item">
-                <span class="github-activity-icon"><i class="fa-solid fa-tag"></i></span>
-                <div class="github-activity-content">
-                    <span class="github-activity-text">Released v0.9.1</span>
-                    <a href="https://github.com/JadXV/Opiumware" target="_blank" class="github-activity-repo">JadXV/Opiumware</a>
-                    <span class="github-activity-time">Jan 31</span>
-                </div>
-            </div>
-            <div class="github-activity-item">
-                <span class="github-activity-icon"><i class="fa-solid fa-star"></i></span>
-                <div class="github-activity-content">
-                    <span class="github-activity-text">Starred repo</span>
-                    <a href="https://github.com/JadXV/Snither" target="_blank" class="github-activity-repo">JadXV/Snither</a>
-                    <span class="github-activity-time">Jan 15</span>
-                </div>
-            </div>
-            <div class="github-activity-item">
-                <span class="github-activity-icon"><i class="fa-solid fa-tag"></i></span>
-                <div class="github-activity-content">
-                    <span class="github-activity-text">Released v6.1</span>
-                    <a href="https://github.com/JadXV/Nitrogen" target="_blank" class="github-activity-repo">JadXV/Nitrogen</a>
-                    <span class="github-activity-time">Jan 6</span>
-                </div>
-            </div>
-        </div>
+        <div class="github-activity-list" id="github-activity"></div>
     </div>
 
     <div class="socials-widget">
@@ -1062,6 +1039,121 @@
         const input = document.getElementById('input');
         const outputContainer = document.getElementById('output-container');
         const topbar = document.getElementById('topbar');
+
+        (function loadGithubActivity() {
+            const GH_USER = 'JadXV';
+            const statsEl = document.getElementById('github-stats');
+            const listEl = document.getElementById('github-activity');
+            if (!listEl) return;
+
+            const setMessage = (msg) => {
+                listEl.innerHTML = `<div class="github-activity-item"><div class="github-activity-content"><span class="github-activity-text">${msg}</span></div></div>`;
+            };
+            setMessage('Loading activity…');
+
+            const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+            }[c]));
+
+            const timeAgo = (iso) => {
+                const then = new Date(iso);
+                if (isNaN(then)) return '';
+                const now = new Date();
+                if (then.getFullYear() === now.getFullYear()) {
+                    return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                }
+                return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            };
+
+            const describe = (ev) => {
+                switch (ev.type) {
+                    case 'PushEvent':
+                        return { icon: 'fa-code-commit', text: 'Pushed a commit' };
+                    case 'ReleaseEvent': {
+                        const tag = ev.payload.release && ev.payload.release.tag_name;
+                        return { icon: 'fa-tag', text: tag ? `Released ${escapeHtml(tag)}` : 'Published a release' };
+                    }
+                    case 'WatchEvent':
+                        return { icon: 'fa-star', text: 'Starred repo' };
+                    case 'ForkEvent':
+                        return { icon: 'fa-code-fork', text: 'Forked repo' };
+                    case 'CreateEvent': {
+                        const t = ev.payload.ref_type || 'repository';
+                        return { icon: 'fa-folder-plus', text: `Created ${escapeHtml(t)}` };
+                    }
+                    case 'PublicEvent':
+                        return { icon: 'fa-unlock', text: 'Open sourced repo' };
+                    case 'PullRequestEvent':
+                        return { icon: 'fa-code-pull-request', text: `${ev.payload.action === 'closed' ? 'Closed' : 'Opened'} pull request` };
+                    case 'IssuesEvent':
+                        return { icon: 'fa-circle-dot', text: `${ev.payload.action === 'closed' ? 'Closed' : 'Opened'} an issue` };
+                    case 'IssueCommentEvent':
+                        return { icon: 'fa-comment', text: 'Commented on an issue' };
+                    default:
+                        return null;
+                }
+            };
+
+            fetch(`https://api.github.com/users/${GH_USER}`)
+                .then((r) => r.ok ? r.json() : Promise.reject(r.status))
+                .then((u) => {
+                    if (statsEl) {
+                        statsEl.textContent = `${u.public_repos} repos • ${u.followers} followers`;
+                    }
+                })
+                .catch(() => { if (statsEl) statsEl.textContent = ''; });
+
+            const MAX_ITEMS = 3;
+
+            const render = (items) => {
+                if (!items.length) { setMessage('No recent public activity'); return; }
+                listEl.innerHTML = items.slice(0, MAX_ITEMS).map((it) => `
+                        <div class="github-activity-item">
+                            <span class="github-activity-icon"><i class="fa-solid ${it.icon}"></i></span>
+                            <div class="github-activity-content">
+                                <span class="github-activity-text">${escapeHtml(it.text)}</span>
+                                <a href="https://github.com/${escapeHtml(it.repo)}" target="_blank" class="github-activity-repo">${escapeHtml(it.repo)}</a>
+                                <span class="github-activity-time">${timeAgo(it.date)}</span>
+                            </div>
+                        </div>`).join('');
+            };
+
+            Promise.all([
+                fetch(`https://api.github.com/users/${GH_USER}/events/public?per_page=30`)
+                    .then((r) => r.ok ? r.json() : []).catch(() => []),
+                fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=pushed&type=owner`)
+                    .then((r) => r.ok ? r.json() : []).catch(() => [])
+            ]).then(([events, repos]) => {
+                const items = [];
+                const seenRepos = new Set();
+
+                if (Array.isArray(events)) {
+                    for (const ev of events) {
+                        const d = describe(ev);
+                        const repo = ev.repo && ev.repo.name;
+                        if (!d || !repo || seenRepos.has(repo)) continue;
+                        seenRepos.add(repo);
+                        items.push({ ...d, repo, date: ev.created_at });
+                    }
+                }
+
+                if (Array.isArray(repos)) {
+                    for (const r of repos) {
+                        if (r.fork || seenRepos.has(r.full_name)) continue;
+                        seenRepos.add(r.full_name);
+                        items.push({
+                            icon: 'fa-code-commit',
+                            text: 'Pushed a commit',
+                            repo: r.full_name,
+                            date: r.pushed_at
+                        });
+                    }
+                }
+
+                items.sort((a, b) => new Date(b.date) - new Date(a.date));
+                render(items);
+            }).catch(() => setMessage('Could not load activity'));
+        })();
 
         const commands = {
             whoami: "<span style='color:#c7c7c7'>My name is </span><span style='color:#e5c07b'>Jad</span><span style='color:#c7c7c7'>, I go by the alias </span><span style='color:#6ec2e8'>JadXV</span><span style='color:#c7c7c7'>.</span><br><span style='color:#c7c7c7'>I'm an </span><span style='color:#98c379'>AvGeek</span><span style='color:#c7c7c7'> and </span><span style='color:#98c379'>programmer</span><span style='color:#c7c7c7'> in various languages.</span><br><br><span style='color:#7f848e'>-></span> <span style='color:#c7c7c7'>Find out what I code in by running </span><span style='color:#e5c07b'>'skills'</span><br><span style='color:#7f848e'>-></span> <span style='color:#c7c7c7'>For aviation info run </span><span style='color:#e5c07b'>'avgeek'</span>",
