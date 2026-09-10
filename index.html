@@ -273,7 +273,11 @@
         }
 
         .command-line { display: flex; align-items: center; flex-wrap: nowrap; }
-        .prompt { margin-right: 8px; white-space: nowrap; flex-shrink: 0; }
+        .prompt { white-space: pre; flex-shrink: 0; }
+
+        html.js .initial-message { visibility: hidden; }
+        html.js #prompt-line { visibility: hidden; }
+        .boot-line { min-height: 1.35em; white-space: pre-wrap; }
 
         #input {
             font-family: 'SF Mono', Monaco, Menlo, monospace;
@@ -296,16 +300,28 @@
             right: 0;
         }
 
-        .resize-handle {
-            position: absolute;
+        .resize-handle { position: absolute; z-index: 5; }
+        .resize-handle.n, .resize-handle.s { left: 10px; right: 10px; height: 6px; cursor: ns-resize; }
+        .resize-handle.e, .resize-handle.w { top: 10px; bottom: 10px; width: 6px; cursor: ew-resize; }
+        .resize-handle.n { top: 0; }
+        .resize-handle.s { bottom: 0; }
+        .resize-handle.e { right: 0; }
+        .resize-handle.w { left: 0; }
+        .resize-handle.ne, .resize-handle.nw, .resize-handle.se, .resize-handle.sw {
+            width: 14px;
+            height: 14px;
+        }
+        .resize-handle.ne { top: 0; right: 0; cursor: nesw-resize; }
+        .resize-handle.nw { top: 0; left: 0; cursor: nwse-resize; }
+        .resize-handle.sw { bottom: 0; left: 0; cursor: nesw-resize; }
+        .resize-handle.se {
             bottom: 0;
             right: 0;
-            width: 15px;
-            height: 15px;
             cursor: nwse-resize;
             background: linear-gradient(135deg, transparent 70%, #444 70%, #444 100%);
             border-bottom-right-radius: 8px;
         }
+        #terminal.maximized .resize-handle { display: none; }
 
         .command-output { color: #c7c7c7; }
         .command-output .error { color: #e06c75; }
@@ -351,6 +367,7 @@
 
         .layout-wrapper {
             display: flex;
+            align-items: center;
             gap: 20px;
             padding: 20px;
             width: 100%;
@@ -365,9 +382,11 @@
             flex-direction: column;
             gap: 16px;
             z-index: 1;
-            overflow: hidden;
             flex-shrink: 0;
-            max-height: 100%;
+            width: 300px;
+            align-self: center;
+            transform-origin: left center;
+            transition: transform 0.2s ease;
         }
 
         .clock-widget {
@@ -375,11 +394,13 @@
             border-radius: 22px;
             padding: clamp(16px, 2.5vh, 24px) clamp(20px, 2vw, 28px);
             display: flex;
+            justify-content: center;
             gap: clamp(16px, 2vw, 25px);
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             user-select: none;
             -webkit-user-select: none;
             flex-shrink: 0;
+            box-sizing: border-box;
         }
 
         .clock-item {
@@ -509,6 +530,7 @@
             user-select: none;
             -webkit-user-select: none;
             flex-shrink: 0;
+            box-sizing: border-box;
         }
 
         .github-header {
@@ -561,6 +583,8 @@
             display: flex;
             flex-direction: column;
             gap: 8px;
+            min-height: 162px;
+            justify-content: center;
         }
 
         .github-activity-item {
@@ -593,6 +617,7 @@
             color: rgba(255,255,255,0.85);
             font-size: 11px;
             line-height: 1.3;
+            overflow-wrap: anywhere;
         }
 
         .github-activity-repo {
@@ -614,6 +639,24 @@
             margin-top: 2px;
         }
 
+        .github-activity-status {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-align: center;
+            padding: 8px 12px;
+            color: rgba(255,255,255,0.45);
+            font-size: 11px;
+            line-height: 1.45;
+        }
+
+        .github-activity-status i {
+            font-size: 15px;
+            color: rgba(255,255,255,0.3);
+        }
+
         .socials-widget {
             background: rgba(30, 30, 30, 0.95);
             border-radius: 22px;
@@ -621,14 +664,13 @@
             font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             display: flex;
             flex-direction: column;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: hidden;
             scrollbar-width: none;
             -ms-overflow-style: none;
             user-select: none;
             -webkit-user-select: none;
-            flex: 1;
-            min-height: 0;
+            flex-shrink: 0;
+            box-sizing: border-box;
         }
 
         .socials-widget::-webkit-scrollbar {
@@ -663,7 +705,6 @@
             display: flex;
             flex-direction: column;
             gap: clamp(6px, 1.2vh, 12px);
-            flex: 1;
         }
 
         .social-item {
@@ -675,7 +716,6 @@
             border-radius: 10px;
             text-decoration: none;
             transition: background 0.2s ease;
-            flex: 1;
         }
 
         .social-item:hover {
@@ -811,6 +851,7 @@
             border: 0;
         }
     </style>
+    <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
     <header class="sr-only">
@@ -851,7 +892,7 @@
             <ul>
                 <li><strong>1st Place Winner - StackHacks Hackathon</strong> - Demonstrated innovative problem-solving and technical excellence</li>
                 <li><strong>1st Place Winner - HackClub Campfire (Mississauga)</strong> - Built a winning project in a competitive field</li>
-                <li><strong>Hackathon Host</strong> - Organizing an upcoming hackathon with $5,000 in prizes (details to be announced)</li>
+                <li><strong>Hackathon Host</strong> - Organizing <a href="https://jechacks.com" target="_blank" rel="noopener">JecHacks</a>, a hackathon with $5,000 in prizes (<a href="https://jechacks.devpost.com/" target="_blank" rel="noopener">Devpost</a>)</li>
                 <li><strong>SpurHacks 2025 Participant</strong> - Competed in Ontario's biggest hackathon</li>
                 <li>Multiple hackathon participations showcasing diverse technical skills</li>
                 <li>Various coding competitions and programming challenges</li>
@@ -951,6 +992,20 @@
                     <span class="social-handle">@JadXV</span>
                 </div>
             </a>
+            <a href="https://devpost.com/JadXV" target="_blank" class="social-item">
+                <div class="social-icon devpost"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M6.002 1.61L0 12.004L6.002 22.39h11.996L24 12.004L17.998 1.61H6.002zm1.593 4.084h3.947c3.605 0 6.276 1.695 6.276 6.31c0 4.436-3.21 6.302-6.456 6.302H7.595V5.694zm2.517 2.449v7.714h1.241c2.646 0 3.862-1.55 3.862-3.861c.009-2.569-1.096-3.853-3.767-3.853H10.112z"/></svg></div>
+                <div class="social-info">
+                    <span class="social-name">Devpost</span>
+                    <span class="social-handle">@JadXV</span>
+                </div>
+            </a>
+            <a href="https://discord.com/channels/@me" class="social-item" style="cursor: default;">
+                <div class="social-icon discord"><i class="fa-brands fa-discord"></i></div>
+                <div class="social-info">
+                    <span class="social-name">Discord</span>
+                    <span class="social-handle">@JadXV.</span>
+                </div>
+            </a>
             <a href="https://x.com/JadXvX" target="_blank" class="social-item">
                 <div class="social-icon twitter"><i class="fa-brands fa-x-twitter"></i></div>
                 <div class="social-info">
@@ -963,20 +1018,6 @@
                 <div class="social-info">
                     <span class="social-name">YouTube</span>
                     <span class="social-handle">@jadxvx</span>
-                </div>
-            </a>
-            <a href="https://devpost.com/JadXV" target="_blank" class="social-item">
-                <div class="social-icon devpost"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M6.002 1.61L0 12.004L6.002 22.39h11.996L24 12.004L17.998 1.61H6.002zm1.593 4.084h3.947c3.605 0 6.276 1.695 6.276 6.31c0 4.436-3.21 6.302-6.456 6.302H7.595V5.694zm2.517 2.449v7.714h1.241c2.646 0 3.862-1.55 3.862-3.861c.009-2.569-1.096-3.853-3.767-3.853H10.112z"/></svg></div>
-                <div class="social-info">
-                    <span class="social-name">Devpost</span>
-                    <span class="social-handle">JadXV</span>
-                </div>
-            </a>
-            <a href="https://discord.com/channels/@me" class="social-item" style="cursor: default;">
-                <div class="social-icon discord"><i class="fa-brands fa-discord"></i></div>
-                <div class="social-info">
-                    <span class="social-name">Discord</span>
-                    <span class="social-handle">@JadXV.</span>
                 </div>
             </a>
         </div>
@@ -994,27 +1035,34 @@
         </div>
         <div id="output-container">
             <div class="initial-message" style="color:#c7c7c7;font-family:'SF Mono',Monaco,Menlo,monospace;margin-bottom:10px;font-size:13px">
-                <span style="color:#c7c7c7">Last update: Sun Mar 8 01:54:45 on ttys000</span><br><br>
-<pre style="color:#6ec2e8;margin:0;line-height:1.2;font-size:11px">
-     ██╗ █████╗ ██████╗ ██╗  ██╗██╗   ██╗
-     ██║██╔══██╗██╔══██╗╚██╗██╔╝██║   ██║
-     ██║███████║██║  ██║ ╚███╔╝ ██║   ██║
-██   ██║██╔══██║██║  ██║ ██╔██╗ ╚██╗ ██╔╝
-╚█████╔╝██║  ██║██████╔╝██╔╝ ██╗ ╚████╔╝ 
- ╚════╝ ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝  ╚═══╝  
-</pre><br>
-                <span style="color:#c7c7c7">Hey there! I'm </span><span style="color:#e5c07b">Jad</span><span style="color:#c7c7c7"> (</span><span style="color:#6ec2e8">JadXV</span><span style="color:#c7c7c7">)</span><br>
-                <span style="color:#c7c7c7">A passionate </span><span style="color:#98c379">programmer</span><span style="color:#c7c7c7"> & </span><span style="color:#98c379">aviation enthusiast</span><span style="color:#c7c7c7"> from </span><span style="color:#e5c07b">Toronto</span><br>
-                <span style="color:#c7c7c7">Hackathon winner | Multi-language developer</span><br><br>
-                <span style="color:#c7c7c7">Type </span><span style="color:#e5c07b">'help'</span><span style="color:#c7c7c7"> to explore available commands and learn more about me!</span><br>
-                <span style="color:#7f848e">Try: whoami - skills - achievements - socials - github</span><br><br>
+                <div class="boot-line" id="last-update-line" style="margin-bottom:8px">Last update: unknown on ttys000</div>
+<pre class="boot-ascii" style="margin:6px 0 10px;line-height:1.08;font-size:11px;background:linear-gradient(90deg,#5b93ff 0%,#8a7bff 50%,#c79cff 100%);-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:#8a7bff">
+     ██╗  █████╗  ██████╗  ██╗  ██╗ ██╗   ██╗
+     ██║ ██╔══██╗ ██╔══██╗ ╚██╗██╔╝ ██║   ██║
+     ██║ ███████║ ██║  ██║  ╚███╔╝  ██║   ██║
+██   ██║ ██╔══██║ ██║  ██║  ██╔██╗  ╚██╗ ██╔╝
+╚█████╔╝ ██║  ██║ ██████╔╝ ██╔╝ ██╗  ╚████╔╝
+ ╚════╝  ╚═╝  ╚═╝ ╚═════╝  ╚═╝  ╚═╝   ╚═══╝
+</pre>
+                <div class="boot-line"><span style="color:#c7c7c7">Hey there! I'm </span><span style="color:#e5c07b">Jad</span><span style="color:#c7c7c7"> (</span><span style="color:#6ec2e8">JadXV</span><span style="color:#c7c7c7">)</span></div>
+                <div class="boot-line"><span style="color:#c7c7c7">A passionate </span><span style="color:#98c379">programmer</span><span style="color:#c7c7c7"> &amp; </span><span style="color:#98c379">aviation enthusiast</span><span style="color:#c7c7c7"> from </span><span style="color:#e5c07b">Toronto</span></div>
+                <div class="boot-line" style="margin-bottom:8px"><span style="color:#c7c7c7">Hackathon winner | Multi-language developer</span></div>
+                <div class="boot-line"><span style="color:#c7c7c7">Type </span><span style="color:#e5c07b">'help'</span><span style="color:#c7c7c7"> to explore available commands and learn more about me!</span></div>
+                <div class="boot-line" style="margin-bottom:8px"><span style="color:#7f848e">Try: whoami - skills - achievements - socials - github</span></div>
             </div>
-            <div class="command-line">
+            <div class="command-line" id="prompt-line">
                 <span class="prompt" style="color:#c7c7c7">jadxv@Jads-MacBook-Pro ~ % </span>
                 <input type="text" id="input" name="terminal-cmd-input" autofocus autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" data-1p-ignore data-lpignore="true" data-form-type="other" role="combobox" aria-autocomplete="none">
             </div>
         </div>
-        <div class="resize-handle"></div>
+        <div class="resize-handle n" data-dir="n"></div>
+        <div class="resize-handle s" data-dir="s"></div>
+        <div class="resize-handle e" data-dir="e"></div>
+        <div class="resize-handle w" data-dir="w"></div>
+        <div class="resize-handle ne" data-dir="ne"></div>
+        <div class="resize-handle nw" data-dir="nw"></div>
+        <div class="resize-handle se" data-dir="se"></div>
+        <div class="resize-handle sw" data-dir="sw"></div>
     </div>
     </div>
 
@@ -1033,7 +1081,7 @@
         let isDragging = false;
         let isResizing = false;
         let dragStartX, dragStartY, dragTranslateX = 0, dragTranslateY = 0, dragStartTransX, dragStartTransY;
-        let originalDimensions = { width: '', height: '', transform: '' };
+        let originalDimensions = { flex: '', width: '', height: '', transform: '' };
 
         const terminal = document.getElementById('terminal');
         const input = document.getElementById('input');
@@ -1044,12 +1092,14 @@
             const GH_USER = 'JadXV';
             const statsEl = document.getElementById('github-stats');
             const listEl = document.getElementById('github-activity');
+            const avatarEl = document.querySelector('.github-avatar');
             if (!listEl) return;
 
-            const setMessage = (msg) => {
-                listEl.innerHTML = `<div class="github-activity-item"><div class="github-activity-content"><span class="github-activity-text">${msg}</span></div></div>`;
+            const setMessage = (msg, icon) => {
+                listEl.innerHTML = `<div class="github-activity-status">`
+                    + (icon ? `<i class="fa-solid ${icon}"></i>` : '')
+                    + `<span>${msg}</span></div>`;
             };
-            setMessage('Loading activity…');
 
             const escapeHtml = (s) => String(s).replace(/[&<>"']/g, (c) => ({
                 '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
@@ -1058,55 +1108,90 @@
             const timeAgo = (iso) => {
                 const then = new Date(iso);
                 if (isNaN(then)) return '';
-                const now = new Date();
-                if (then.getFullYear() === now.getFullYear()) {
-                    return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                const secs = Math.floor((Date.now() - then.getTime()) / 1000);
+                const units = [['yr', 31536000], ['mo', 2592000], ['wk', 604800], ['d', 86400], ['h', 3600], ['m', 60]];
+                for (const [label, s] of units) {
+                    const v = Math.floor(secs / s);
+                    if (v >= 1) return `${v}${label} ago`;
                 }
-                return then.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                return 'just now';
             };
 
             const describe = (ev) => {
+                const p = ev.payload || {};
                 switch (ev.type) {
-                    case 'PushEvent':
-                        return { icon: 'fa-code-commit', text: 'Pushed a commit' };
-                    case 'ReleaseEvent': {
-                        const tag = ev.payload.release && ev.payload.release.tag_name;
-                        return { icon: 'fa-tag', text: tag ? `Released ${escapeHtml(tag)}` : 'Published a release' };
+                    case 'PushEvent': {
+                        const n = p.size || (p.commits ? p.commits.length : 0);
+                        const branch = String(p.ref || '').replace('refs/heads/', '');
+                        const msg = p.commits && p.commits.length
+                            ? p.commits[p.commits.length - 1].message.split('\n')[0].slice(0, 72)
+                            : '';
+                        return {
+                            icon: 'fa-code-commit',
+                            text: msg
+                                ? `“${msg}”`
+                                : (n ? `Pushed ${n} commit${n > 1 ? 's' : ''}${branch ? ' to ' + branch : ''}` : 'Pushed commits')
+                        };
                     }
-                    case 'WatchEvent':
-                        return { icon: 'fa-star', text: 'Starred repo' };
+                    case 'ReleaseEvent': {
+                        const tag = p.release && p.release.tag_name;
+                        return { icon: 'fa-tag', text: tag ? `Released ${tag}` : 'Published a release' };
+                    }
                     case 'ForkEvent':
-                        return { icon: 'fa-code-fork', text: 'Forked repo' };
+                        return { icon: 'fa-code-fork', text: 'Forked a repo' };
                     case 'CreateEvent': {
-                        const t = ev.payload.ref_type || 'repository';
-                        return { icon: 'fa-folder-plus', text: `Created ${escapeHtml(t)}` };
+                        if (p.ref_type === 'repository' || (p.ref_type === 'branch' && p.ref === p.master_branch)) {
+                            return { icon: 'fa-folder-plus', text: 'Created a repository' };
+                        }
+                        if (p.ref_type === 'tag') return { icon: 'fa-tag', text: `Created tag ${p.ref}` };
+                        return { icon: 'fa-code-branch', text: `Created branch ${p.ref}` };
                     }
                     case 'PublicEvent':
-                        return { icon: 'fa-unlock', text: 'Open sourced repo' };
-                    case 'PullRequestEvent':
-                        return { icon: 'fa-code-pull-request', text: `${ev.payload.action === 'closed' ? 'Closed' : 'Opened'} pull request` };
+                        return { icon: 'fa-unlock', text: 'Open sourced a repo' };
+                    case 'PullRequestEvent': {
+                        const merged = p.action === 'closed' && p.pull_request && p.pull_request.merged;
+                        return { icon: 'fa-code-pull-request', text: `${merged ? 'Merged' : p.action === 'closed' ? 'Closed' : 'Opened'} a pull request` };
+                    }
                     case 'IssuesEvent':
-                        return { icon: 'fa-circle-dot', text: `${ev.payload.action === 'closed' ? 'Closed' : 'Opened'} an issue` };
+                        return { icon: 'fa-circle-dot', text: `${p.action === 'closed' ? 'Closed' : 'Opened'} an issue` };
                     case 'IssueCommentEvent':
                         return { icon: 'fa-comment', text: 'Commented on an issue' };
+                    case 'PullRequestReviewEvent':
+                        return { icon: 'fa-code-pull-request', text: 'Reviewed a pull request' };
                     default:
                         return null;
                 }
             };
 
-            fetch(`https://api.github.com/users/${GH_USER}`)
-                .then((r) => r.ok ? r.json() : Promise.reject(r.status))
-                .then((u) => {
-                    if (statsEl) {
-                        statsEl.textContent = `${u.public_repos} repos • ${u.followers} followers`;
-                    }
-                })
-                .catch(() => { if (statsEl) statsEl.textContent = ''; });
+            const isRateLimited = (r) =>
+                (r.status === 403 || r.status === 429) && r.headers.get('x-ratelimit-remaining') === '0';
+
+            const rateLimitResetText = (r) => {
+                const reset = Number(r.headers.get('x-ratelimit-reset'));
+                if (!reset) return '';
+                const mins = Math.max(1, Math.ceil((reset * 1000 - Date.now()) / 60000));
+                return ` · retry in ~${mins}m`;
+            };
+
+            const api = (path) => fetch(`https://api.github.com/${path}`, {
+                headers: { 'Accept': 'application/vnd.github+json' }
+            }).then((res) => {
+                if (res.ok) return res.json().then((data) => ({ data, rateLimited: false, res }));
+                return { data: null, rateLimited: isRateLimited(res), res };
+            }).catch(() => ({ data: null, rateLimited: false, res: null }));
 
             const MAX_ITEMS = 3;
 
+            const applyUser = (u) => {
+                if (!u) return;
+                if (statsEl && u.public_repos != null) {
+                    statsEl.textContent = `${u.public_repos} repos • ${u.followers} followers`;
+                }
+                if (avatarEl && u.avatar_url) avatarEl.src = u.avatar_url;
+            };
+
             const render = (items) => {
-                if (!items.length) { setMessage('No recent public activity'); return; }
+                if (!items || !items.length) { setMessage('No recent public activity', 'fa-inbox'); return; }
                 listEl.innerHTML = items.slice(0, MAX_ITEMS).map((it) => `
                         <div class="github-activity-item">
                             <span class="github-activity-icon"><i class="fa-solid ${it.icon}"></i></span>
@@ -1118,41 +1203,96 @@
                         </div>`).join('');
             };
 
-            Promise.all([
-                fetch(`https://api.github.com/users/${GH_USER}/events/public?per_page=30`)
-                    .then((r) => r.ok ? r.json() : []).catch(() => []),
-                fetch(`https://api.github.com/users/${GH_USER}/repos?per_page=100&sort=pushed&type=owner`)
-                    .then((r) => r.ok ? r.json() : []).catch(() => [])
-            ]).then(([events, repos]) => {
-                const items = [];
-                const seenRepos = new Set();
+            const CACHE_KEY = 'gh-activity:' + GH_USER;
+            const CACHE_TTL = 60 * 1000;
 
-                if (Array.isArray(events)) {
-                    for (const ev of events) {
-                        const d = describe(ev);
-                        const repo = ev.repo && ev.repo.name;
-                        if (!d || !repo || seenRepos.has(repo)) continue;
-                        seenRepos.add(repo);
-                        items.push({ ...d, repo, date: ev.created_at });
+            const readCache = () => {
+                try {
+                    const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+                    return (c && typeof c.ts === 'number') ? c : null;
+                } catch (e) { return null; }
+            };
+            const writeCache = (user, items, note) => {
+                try {
+                    localStorage.setItem(CACHE_KEY, JSON.stringify({
+                        ts: Date.now(),
+                        user: user
+                            ? { public_repos: user.public_repos, followers: user.followers, avatar_url: user.avatar_url }
+                            : (cache && cache.user) || null,
+                        items: items != null ? items : null,
+                        note: note || null
+                    }));
+                } catch (e) {}
+            };
+
+            const cache = readCache();
+            if (cache && cache.items) {
+                applyUser(cache.user);
+                render(cache.items);
+            } else if (cache && cache.note) {
+                applyUser(cache.user);
+                setMessage(cache.note.msg, cache.note.icon);
+            } else {
+                setMessage('Loading activity…', 'fa-circle-notch fa-spin');
+            }
+
+            if (cache && Date.now() - cache.ts < CACHE_TTL) return;
+
+            Promise.all([
+                api(`users/${GH_USER}`),
+                api(`users/${GH_USER}/events/public?per_page=100`),
+                api(`users/${GH_USER}/repos?per_page=100&sort=pushed&type=owner`)
+            ]).then(([userRes, eventsRes, reposRes]) => {
+                if (userRes.data) applyUser(userRes.data);
+
+                const limitedRes = [userRes, eventsRes, reposRes].find((x) => x.rateLimited);
+                const gotData = Array.isArray(eventsRes.data) || Array.isArray(reposRes.data);
+
+                if (limitedRes || !gotData) {
+                    if (cache && cache.items) {
+                        writeCache(userRes.data, cache.items);
+                        return;
                     }
+                    const note = limitedRes
+                        ? { msg: `Rate limited by GitHub${rateLimitResetText(limitedRes.res)}`, icon: 'fa-clock' }
+                        : { msg: 'Could not load activity', icon: 'fa-triangle-exclamation' };
+                    setMessage(note.msg, note.icon);
+                    writeCache(userRes.data, null, note);
+                    return;
                 }
 
-                if (Array.isArray(repos)) {
-                    for (const r of repos) {
-                        if (r.fork || seenRepos.has(r.full_name)) continue;
-                        seenRepos.add(r.full_name);
-                        items.push({
-                            icon: 'fa-code-commit',
-                            text: 'Pushed a commit',
-                            repo: r.full_name,
-                            date: r.pushed_at
-                        });
-                    }
+                const events = Array.isArray(eventsRes.data) ? eventsRes.data : [];
+                const repos = Array.isArray(reposRes.data) ? reposRes.data : [];
+                const items = [];
+                const seen = new Set();
+
+                for (const ev of events) {
+                    const d = describe(ev);
+                    const repo = ev.repo && ev.repo.name;
+                    if (!d || !repo) continue;
+                    const key = repo + '|' + ev.type;
+                    if (seen.has(key)) continue;
+                    seen.add(key);
+                    items.push({ ...d, repo, date: ev.created_at });
+                }
+
+                const cutoff = Date.now() - 1000 * 60 * 60 * 24 * 182;
+                for (const r of repos) {
+                    if (r.fork || !r.pushed_at || new Date(r.pushed_at).getTime() < cutoff) continue;
+                    if (seen.has(r.full_name + '|PushEvent')) continue;
+                    seen.add(r.full_name + '|PushEvent');
+                    items.push({ icon: 'fa-code-commit', text: 'Pushed commits', repo: r.full_name, date: r.pushed_at });
                 }
 
                 items.sort((a, b) => new Date(b.date) - new Date(a.date));
-                render(items);
-            }).catch(() => setMessage('Could not load activity'));
+                const top = items.slice(0, MAX_ITEMS);
+                render(top);
+                writeCache(userRes.data, top);
+            }).catch(() => {
+                if (cache && cache.items) { writeCache(cache.user, cache.items); return; }
+                setMessage('Could not load activity', 'fa-triangle-exclamation');
+                writeCache(null, null, { msg: 'Could not load activity', icon: 'fa-triangle-exclamation' });
+            });
         })();
 
         const commands = {
@@ -1161,7 +1301,7 @@
             avgeek: "<span style='color:#c7c7c7'>I'm an </span><span style='color:#98c379'>AvGeek</span><span style='color:#c7c7c7'> - I love planes and aviation in general!</span><br><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Flight simulation enthusiast</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Extensive knowledge of aircraft systems</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Aviation industry follower</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Multiple flight sim platforms</span>",
             github: "<span style='color:#c7c7c7'>Keep in mind that </span><span style='color:#e5c07b'>98%</span><span style='color:#c7c7c7'> of my projects are private</span><br><span style='color:#c7c7c7'>But I'm working towards open sourcing them!</span><br><br><a href='https://github.com/JadXV' target='_blank' class='modern-link'>My GitHub Profile</a>",
             socials: "<span style='color:#c7c7c7'>Discord: </span><span style='color:#6ec2e8'>@JadXV.</span> <span style='color:#7f848e'>(with the dot)</span><br><br><span style='color:#c7c7c7'>Other platforms:</span><br><a href='https://www.youtube.com/@jadxvx' target='_blank' class='modern-link youtube'>YouTube</a><br><a href='https://x.com/JadXvX' target='_blank' class='modern-link twitter'>Twitter/X</a><br><a href='https://devpost.com/JadXV' target='_blank' class='modern-link devpost'>Devpost</a>",
-            achievements: "<span style='color:#c7c7c7'>My competition achievements:</span><br><br><span style='color:#e5c07b'>High Placing Member</span><br><span style='color:#c7c7c7'>SpurHacks 2025</span> <span style='color:#7f848e'>- Biggest hackathon in Ontario</span><br><br><span style='color:#98c379'>1st Place Winner</span><br><span style='color:#c7c7c7'>StackHacks Hackathon</span><br><br><span style='color:#98c379'>1st Place Winner</span><br><span style='color:#c7c7c7'>HackClub Campfire</span> <span style='color:#7f848e'>- Mississauga</span><br><br><span style='color:#61afef'>Hackathon Host</span><br><span style='color:#c7c7c7'>Unannounced hackathon</span> <span style='color:#7f848e'>- $5,000 in prizes (coming soon)</span><br><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Multiple hackathon participations</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Various coding competitions</span><br><br><a href='https://devpost.com/JadXV' target='_blank' class='modern-link devpost'>View hackathon participations</a>",
+            achievements: "<span style='color:#c7c7c7'>My competition achievements:</span><br><br><span style='color:#e5c07b'>High Placing Member</span><br><span style='color:#c7c7c7'>SpurHacks 2025</span> <span style='color:#7f848e'>- Biggest hackathon in Ontario</span><br><br><span style='color:#98c379'>1st Place Winner</span><br><span style='color:#c7c7c7'>StackHacks Hackathon</span><br><br><span style='color:#98c379'>1st Place Winner</span><br><span style='color:#c7c7c7'>HackClub Campfire</span> <span style='color:#7f848e'>- Mississauga</span><br><br><span style='color:#61afef'>Hackathon Host</span><br><a href='https://jechacks.com' target='_blank' class='modern-link'>JecHacks</a> <span style='color:#7f848e'>- $5,000 in prizes</span><br><a href='https://jechacks.devpost.com/' target='_blank' class='modern-link devpost'>jechacks.devpost.com</a><br><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Multiple hackathon participations</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Various coding competitions</span><br><br><a href='https://devpost.com/JadXV' target='_blank' class='modern-link devpost'>View hackathon participations</a>",
             projects: "<span style='color:#c7c7c7'>Working on open sourcing my projects</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Keep an eye on my GitHub for updates</span><br><span style='color:#7f848e'>-</span> <span style='color:#c7c7c7'>Various tools and applications in development</span>",
             clear: "Clears the terminal screen",
             cls: "Clears the terminal screen",
@@ -1219,12 +1359,23 @@
             if (isMobile()) document.getElementById('mobile-notice').style.display = 'flex';
         }
 
+        function tzOffsetHours(date, timeZone) {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone, hour12: false,
+                year: 'numeric', month: '2-digit', day: '2-digit',
+                hour: '2-digit', minute: '2-digit', second: '2-digit'
+            }).formatToParts(date).reduce((a, p) => (a[p.type] = p.value, a), {});
+            const asUTC = Date.UTC(parts.year, parts.month - 1, parts.day,
+                parts.hour === '24' ? 0 : parts.hour, parts.minute, parts.second);
+            return Math.round((asUTC - date.getTime()) / 60000) / 60;
+        }
+
         function updateClockWidget() {
             const now = new Date();
             const torontoTime = new Date(now.toLocaleString('en-US', { timeZone: 'America/Toronto' }));
             const userTime = now;
-            
-            const torontoOffset = -5;
+
+            const torontoOffset = tzOffsetHours(now, 'America/Toronto');
             const userOffset = -now.getTimezoneOffset() / 60;
             const diffHours = Math.round((torontoOffset - userOffset));
             
@@ -1294,17 +1445,263 @@
             if (e.target === this) dismissMobileNotice();
         });
 
-        window.addEventListener('load', () => {
+        let terminalFollowsSidebar = true;
+        function fitSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            const wrapper = document.querySelector('.layout-wrapper');
+            if (!sidebar || !wrapper || getComputedStyle(sidebar).display === 'none') return;
+            sidebar.style.transform = 'none';
+            sidebar.style.marginRight = '';
+            const styles = getComputedStyle(wrapper);
+            const available = wrapper.clientHeight
+                - parseFloat(styles.paddingTop) - parseFloat(styles.paddingBottom);
+            const natural = sidebar.offsetHeight;
+            const boxWidth = sidebar.offsetWidth;
+            if (!natural) return;
+            const scale = Math.min(1, available / natural);
+            const scaled = scale < 0.999;
+            sidebar.style.transform = scaled ? `scale(${scale})` : 'none';
+            sidebar.style.marginRight = scaled ? `-${Math.round(boxWidth * (1 - scale))}px` : '';
+
+            if (terminalFollowsSidebar && terminal && !terminal.classList.contains('maximized')) {
+                terminal.style.height = `${Math.round(natural * scale)}px`;
+            }
+        }
+
+        let terminalPinned = false;
+
+        function pinTerminalTop() {
+            if (terminalPinned) return;
+            const before = terminal.getBoundingClientRect();
+            terminal.style.alignSelf = 'flex-start';
+            const after = terminal.getBoundingClientRect();
+            dragTranslateY += (before.top - after.top) / currentScale;
+            terminal.style.transform = `translate(${dragTranslateX}px, ${dragTranslateY}px)`;
+            terminalPinned = true;
+        }
+
+        function resetManualTerminalLayout() {
+            if (terminal.classList.contains('maximized')) return;
+            terminal.style.flex = '';
+            terminal.style.width = '';
+            terminal.style.height = '';
+            terminal.style.alignSelf = '';
+            dragTranslateX = 0;
+            dragTranslateY = 0;
+            terminal.style.transform = '';
+            terminalPinned = false;
+            terminalFollowsSidebar = true;
+        }
+
+        window.addEventListener('resize', resetManualTerminalLayout);
+        window.addEventListener('resize', fitSidebar);
+        if (window.ResizeObserver) {
+            const sb = document.querySelector('.sidebar');
+            if (sb) new ResizeObserver(fitSidebar).observe(sb);
+        }
+
+        async function bootApp() {
             showMobileNotice();
             updateWelcomeTimes();
             updateClockWidget();
             setInterval(updateWelcomeTimes, 1000);
             setInterval(updateClockWidget, 1000);
             terminal.style.display = 'flex';
-            if (input) input.focus();
-            animationComplete = true;
             updateTerminalSize();
-        });
+            fitSidebar();
+            setTimeout(fitSidebar, 300);
+            await loadLastUpdate();
+            skeletonBoot();
+        }
+
+        if (document.readyState === 'complete') bootApp();
+        else window.addEventListener('load', bootApp);
+
+        async function loadLastUpdate() {
+            const line = document.getElementById('last-update-line');
+            if (!line) return;
+
+            const CACHE_KEY = 'gh-last-update:JadXV/portfolio';
+            const CACHE_TTL = 60 * 1000;
+
+            const readCache = () => {
+                try {
+                    const c = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null');
+                    return (c && typeof c.ts === 'number') ? c : null;
+                } catch (e) { return null; }
+            };
+            const writeCache = (text) => {
+                try { localStorage.setItem(CACHE_KEY, JSON.stringify({ ts: Date.now(), text })); } catch (e) {}
+            };
+
+            const cache = readCache();
+            if (cache && cache.text) line.textContent = cache.text;
+            if (cache && Date.now() - cache.ts < CACHE_TTL) return;
+
+            try {
+                const res = await Promise.race([
+                    fetch('https://api.github.com/repos/JadXV/portfolio/commits?per_page=1', {
+                        headers: { 'Accept': 'application/vnd.github+json' }
+                    }),
+                    new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 600))
+                ]);
+                if (!res.ok) throw new Error('bad response');
+                const data = await res.json();
+                const iso = data[0]?.commit?.committer?.date || data[0]?.commit?.author?.date;
+                const date = new Date(iso);
+                if (isNaN(date)) throw new Error('bad date');
+                const formatted = date.toLocaleString('en-US', {
+                    weekday: 'short', month: 'short', day: 'numeric', year: 'numeric',
+                    hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: false,
+                    timeZone: 'America/Toronto'
+                }).replace(/,/g, '');
+                const text = `Last update: ${formatted} on ttys000`;
+                line.textContent = text;
+                writeCache(text);
+            } catch (e) {
+                if (cache && cache.text) { writeCache(cache.text); return; }
+                const text = 'Last update: unavailable — GitHub unreachable';
+                line.textContent = text;
+                writeCache(text);
+            }
+        }
+
+        function skeletonBoot() {
+            const container = document.querySelector('.initial-message');
+            if (!container) { animationComplete = true; return; }
+
+            const promptLine = document.getElementById('prompt-line');
+            const promptSpan = promptLine ? promptLine.querySelector('.prompt') : null;
+
+            container.style.visibility = 'visible';
+            if (promptLine) promptLine.style.visibility = 'visible';
+
+            if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                animationComplete = true;
+                input.focus();
+                return;
+            }
+
+            const blocks = Array.from(container.children).map((el) => ({
+                el, html: el.innerHTML, ascii: el.classList.contains('boot-ascii')
+            }));
+            const promptHtml = promptSpan ? promptSpan.innerHTML : null;
+
+            animationComplete = false;
+
+            const ROW_WEIGHT = 8;
+            const STEP = 4;
+            const FADE = 180;
+
+            const timers = [];
+            const at = (delay, fn) => timers.push(setTimeout(fn, delay));
+            let maxDelay = 0;
+
+            const fadeIn = (node, delay) => {
+                node.style.opacity = '0';
+                node.style.transition = `opacity ${FADE}ms ease`;
+                at(delay, () => { node.style.opacity = '1'; });
+                if (delay > maxDelay) maxDelay = delay;
+            };
+
+            const spanChar = (ch, delay) => {
+                const s = document.createElement('span');
+                s.textContent = ch;
+                fadeIn(s, delay);
+                return s;
+            };
+
+            const splitChars = (el, row, startCol) => {
+                const walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+                const textNodes = [];
+                while (walker.nextNode()) textNodes.push(walker.currentNode);
+                let col = startCol;
+                textNodes.forEach((tn) => {
+                    const frag = document.createDocumentFragment();
+                    for (const ch of tn.nodeValue) frag.appendChild(spanChar(ch, (row * ROW_WEIGHT + col++) * STEP));
+                    tn.parentNode.replaceChild(frag, tn);
+                });
+                return col;
+            };
+
+            let vrow = 0;
+            blocks.forEach((b) => {
+                if (b.ascii) {
+                    const lines = b.el.textContent.replace(/^\n/, '').replace(/\n$/, '').split('\n');
+                    b.el.textContent = '';
+                    lines.forEach((line, li) => {
+                        const row = vrow + li;
+                        [...line].forEach((ch, col) => b.el.appendChild(spanChar(ch, (row * ROW_WEIGHT + col) * STEP)));
+                        if (li < lines.length - 1) b.el.appendChild(document.createTextNode('\n'));
+                    });
+                    vrow += lines.length;
+                    return;
+                }
+                splitChars(b.el, vrow++, 0);
+            });
+
+            const promptRow = vrow++;
+            const afterPrompt = promptSpan ? splitChars(promptSpan, promptRow, 0) : 0;
+            fadeIn(input, (promptRow * ROW_WEIGHT + afterPrompt) * STEP);
+
+            let done = false;
+            const settle = () => {
+                if (done) return;
+                done = true;
+                timers.forEach(clearTimeout);
+                window.removeEventListener('keydown', settle);
+                outputContainer.removeEventListener('click', settle);
+                blocks.forEach((b) => {
+                    b.el.innerHTML = b.html;
+                    b.el.style.opacity = '';
+                    b.el.style.transition = '';
+                });
+                if (promptSpan && promptHtml !== null) promptSpan.innerHTML = promptHtml;
+                input.style.opacity = '';
+                input.style.transition = '';
+                animationComplete = true;
+                input.focus();
+                outputContainer.scrollTop = outputContainer.scrollHeight;
+            };
+            window.addEventListener('keydown', settle);
+            outputContainer.addEventListener('click', settle);
+            at(maxDelay + FADE, settle);
+        }
+
+        function levenshtein(a, b) {
+            const m = a.length, n = b.length;
+            if (!m) return n;
+            if (!n) return m;
+            const row = Array.from({ length: n + 1 }, (_, j) => j);
+            for (let i = 1; i <= m; i++) {
+                let prev = row[0];
+                row[0] = i;
+                for (let j = 1; j <= n; j++) {
+                    const tmp = row[j];
+                    row[j] = Math.min(
+                        row[j] + 1,
+                        row[j - 1] + 1,
+                        prev + (a[i - 1] === b[j - 1] ? 0 : 1)
+                    );
+                    prev = tmp;
+                }
+            }
+            return row[n];
+        }
+
+        function closestCommand(typed) {
+            let best = null, bestDist = Infinity;
+            for (const name of Object.keys(commands)) {
+                const d = levenshtein(typed, name);
+                if (d < bestDist) { bestDist = d; best = name; }
+            }
+            const threshold = typed.length <= 4 ? 2 : 3;
+            return bestDist <= threshold ? best : null;
+        }
+
+        const escapeTerminal = (s) => String(s).replace(/[&<>"']/g, (c) => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[c]));
 
         function updateTerminalSize() {
             const cols = Math.floor(terminal.offsetWidth / 8);
@@ -1326,12 +1723,14 @@
                 if (action === 'maximize') {
                     if (terminal.classList.contains('maximized')) {
                         terminal.classList.remove('maximized');
+                        terminal.style.flex = originalDimensions.flex;
                         terminal.style.width = originalDimensions.width;
                         terminal.style.height = originalDimensions.height;
                         terminal.style.transform = originalDimensions.transform;
                         setTimeout(updateTerminalSize, 350);
                     } else {
                         originalDimensions = {
+                            flex: terminal.style.flex || '',
                             width: terminal.style.width || '',
                             height: terminal.style.height || '',
                             transform: terminal.style.transform || ''
@@ -1347,7 +1746,7 @@
                             const reopenDiv = document.createElement('div');
                             reopenDiv.id = 'reopen-message';
                             reopenDiv.style = 'position:fixed;inset:0;display:flex;align-items:center;justify-content:center;font-family:monospace;color:white;text-align:center;cursor:pointer;z-index:10001;padding:24px;box-sizing:border-box;background:transparent';
-                            reopenDiv.innerHTML = "You've closed/minimized my portfolio, press anywhere to reopen";
+                            reopenDiv.innerHTML = "You've closed/minimized my terminal, press anywhere to reopen";
                             document.body.appendChild(reopenDiv);
                             document.body.addEventListener('click', function reopenListener() {
                                 const reopenMessage = document.getElementById('reopen-message');
@@ -1367,62 +1766,125 @@
 
         terminal.addEventListener('click', () => input.focus());
 
+        let historyIndex = commandsran.length;
+
+        const caretToEnd = () => requestAnimationFrame(() => {
+            try { input.setSelectionRange(input.value.length, input.value.length); } catch (e) {}
+        });
+
+        const printBlock = (html) => {
+            const el = document.createElement('div');
+            el.className = 'command-output';
+            el.innerHTML = html;
+            outputContainer.insertBefore(el, input.parentElement);
+            outputContainer.insertBefore(document.createElement('br'), input.parentElement);
+            outputContainer.scrollTop = outputContainer.scrollHeight;
+        };
+
         input.addEventListener('keydown', function(event) {
-            if (event.key === 'ArrowUp' && commandsran.length > 0) {
+            if (!animationComplete) { event.preventDefault(); return; }
+
+            if (event.key === 'ArrowUp') {
                 event.preventDefault();
-                input.value = commandsran.pop();
-            } else if (event.key === 'Tab') {
-                event.preventDefault();
-                const matchingCommands = Object.keys(commands).filter(c => c.startsWith(input.value.toLowerCase()));
-                if (matchingCommands.length === 1) input.value = matchingCommands[0];
-            } else if (event.key === 'Enter') {
-                const commandInput = input.value;
-                const command = commandInput.toLowerCase();
-
-                if (command === 'cls' || command === 'clear') {
-                    while (outputContainer.children.length > 1) {
-                        outputContainer.removeChild(outputContainer.children[0]);
-                    }
-                    input.value = '';
-                    return;
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    input.value = commandsran[historyIndex];
+                    caretToEnd();
                 }
-
-                const newOutput = document.createElement('div');
-                newOutput.classList.add('command-line');
-                newOutput.innerHTML = `<span class="prompt" style="color:#c7c7c7">jadxv@Jads-MacBook-Pro ~ % </span><span style="color:#ccc">${commandInput}</span>`;
-
-                const commandResult = document.createElement('div');
-                commandResult.classList.add('command-output');
-                commandsran.push(commandInput);
-
-                if (commands[command]) {
-                    if (command === 'help') {
-                        commandResult.innerHTML = "<span style='color:#c7c7c7'>Here are all the commands you can use:</span><br><br>" +
-                            "<span style='color:#6ec2e8'>whoami</span> <span style='color:#7f848e'>- Learn more about me</span><br>" +
-                            "<span style='color:#6ec2e8'>skills</span> <span style='color:#7f848e'>- View programming languages & skills</span><br>" +
-                            "<span style='color:#6ec2e8'>avgeek</span> <span style='color:#7f848e'>- Aviation enthusiasm & flight sim</span><br>" +
-                            "<span style='color:#6ec2e8'>github</span> <span style='color:#7f848e'>- View GitHub profile</span><br>" +
-                            "<span style='color:#6ec2e8'>socials</span> <span style='color:#7f848e'>- Social media & contact info</span><br>" +
-                            "<span style='color:#6ec2e8'>achievements</span> <span style='color:#7f848e'>- Hackathons & competitions</span><br>" +
-                            "<span style='color:#6ec2e8'>projects</span> <span style='color:#7f848e'>- Current development work</span><br>" +
-                            "<span style='color:#6ec2e8'>clear</span> <span style='color:#7f848e'>- Clear the terminal screen</span><br>" +
-                            "<span style='color:#6ec2e8'>help</span> <span style='color:#7f848e'>- Show this help menu</span><br><br>" +
-                            "<span style='color:#7f848e'>Tip: Use Tab for command auto-completion</span>";
-                    } else {
-                        commandResult.innerHTML = commands[command];
-                    }
-                } else if (command === '') {
-                    commandResult.innerHTML = '';
-                } else {
-                    commandResult.innerHTML = `<span class="error">zsh: command not found: ${commandInput}</span><br><span style="color:#7f848e">Type 'help' to see available commands</span>`;
-                }
-
-                outputContainer.insertBefore(newOutput, input.parentElement);
-                outputContainer.insertBefore(commandResult, input.parentElement);
-                outputContainer.insertBefore(document.createElement('br'), input.parentElement);
-                input.value = '';
-                outputContainer.scrollTop = outputContainer.scrollHeight;
+                return;
             }
+
+            if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                if (historyIndex < commandsran.length) {
+                    historyIndex++;
+                    input.value = historyIndex === commandsran.length ? '' : commandsran[historyIndex];
+                    caretToEnd();
+                }
+                return;
+            }
+
+            if (event.key === 'Tab') {
+                event.preventDefault();
+                const token = input.value.trim().toLowerCase();
+                if (!token) return;
+                const matches = Object.keys(commands).filter((c) => c.startsWith(token));
+                if (matches.length === 1) {
+                    input.value = matches[0];
+                } else if (matches.length > 1) {
+                    const lcp = matches.reduce((p, c) => {
+                        let i = 0;
+                        while (i < p.length && p[i] === c[i]) i++;
+                        return p.slice(0, i);
+                    });
+                    if (lcp.length > token.length) {
+                        input.value = lcp;
+                    } else {
+                        printBlock(
+                            `<span class="prompt" style="color:#c7c7c7">jadxv@Jads-MacBook-Pro ~ % </span><span style="color:#ccc">${escapeTerminal(input.value)}</span><br>` +
+                            matches.map((m) => `<span style="color:#6ec2e8">${m}</span>`).join('&nbsp;&nbsp;&nbsp;')
+                        );
+                    }
+                }
+                return;
+            }
+
+            if (event.key !== 'Enter') return;
+
+            const commandInput = input.value;
+            const command = commandInput.trim().toLowerCase();
+
+            if (commandInput.trim() && commandsran[commandsran.length - 1] !== commandInput) {
+                commandsran.push(commandInput);
+            }
+            historyIndex = commandsran.length;
+
+            if (command === 'cls' || command === 'clear') {
+                while (outputContainer.children.length > 1) {
+                    outputContainer.removeChild(outputContainer.children[0]);
+                }
+                input.value = '';
+                return;
+            }
+
+            const newOutput = document.createElement('div');
+            newOutput.classList.add('command-line');
+            newOutput.innerHTML = `<span class="prompt" style="color:#c7c7c7">jadxv@Jads-MacBook-Pro ~ % </span><span style="color:#ccc">${escapeTerminal(commandInput)}</span>`;
+
+            const commandResult = document.createElement('div');
+            commandResult.classList.add('command-output');
+
+            if (commands[command]) {
+                if (command === 'help') {
+                    commandResult.innerHTML = "<span style='color:#c7c7c7'>Here are all the commands you can use:</span><br><br>" +
+                        "<span style='color:#6ec2e8'>whoami</span> <span style='color:#7f848e'>- Learn more about me</span><br>" +
+                        "<span style='color:#6ec2e8'>skills</span> <span style='color:#7f848e'>- View programming languages & skills</span><br>" +
+                        "<span style='color:#6ec2e8'>avgeek</span> <span style='color:#7f848e'>- Aviation enthusiasm & flight sim</span><br>" +
+                        "<span style='color:#6ec2e8'>github</span> <span style='color:#7f848e'>- View GitHub profile</span><br>" +
+                        "<span style='color:#6ec2e8'>socials</span> <span style='color:#7f848e'>- Social media & contact info</span><br>" +
+                        "<span style='color:#6ec2e8'>achievements</span> <span style='color:#7f848e'>- Hackathons & competitions</span><br>" +
+                        "<span style='color:#6ec2e8'>projects</span> <span style='color:#7f848e'>- Current development work</span><br>" +
+                        "<span style='color:#6ec2e8'>clear</span> <span style='color:#7f848e'>- Clear the terminal screen</span><br>" +
+                        "<span style='color:#6ec2e8'>help</span> <span style='color:#7f848e'>- Show this help menu</span><br><br>" +
+                        "<span style='color:#7f848e'>Tip: ↑ / ↓ browse history · Tab to complete</span>";
+                } else {
+                    commandResult.innerHTML = commands[command];
+                }
+            } else if (command === '') {
+                commandResult.innerHTML = '';
+            } else {
+                const guess = closestCommand(command);
+                commandResult.innerHTML = `<span class="error">zsh: command not found: ${escapeTerminal(commandInput)}</span><br>` +
+                    (guess
+                        ? `<span style="color:#7f848e">Did you mean </span><span style="color:#e5c07b">${guess}</span><span style="color:#7f848e">?</span>`
+                        : `<span style="color:#7f848e">Type 'help' to see available commands</span>`);
+            }
+
+            outputContainer.insertBefore(newOutput, input.parentElement);
+            outputContainer.insertBefore(commandResult, input.parentElement);
+            outputContainer.insertBefore(document.createElement('br'), input.parentElement);
+            input.value = '';
+            outputContainer.scrollTop = outputContainer.scrollHeight;
         });
 
         topbar.addEventListener('mousedown', function(event) {
@@ -1470,39 +1932,89 @@
             }
         });
 
-        document.querySelector('.resize-handle').addEventListener('mousedown', function(event) {
-            if (terminal.classList.contains('maximized') || isMobile()) return;
-            event.preventDefault();
-            isResizing = true;
-            const startX = event.clientX;
-            const startY = event.clientY;
-            const startWidth = terminal.offsetWidth;
-            const startHeight = terminal.offsetHeight;
+        const RESIZE_MARGIN = 12, MIN_WIDTH = 320, MIN_HEIGHT = 220;
 
-            function resize(e) {
-                if (!isResizing) return;
-                terminal.style.transition = 'none';
-                const minWidth = parseInt(getComputedStyle(terminal).minWidth) || 250;
-                const minHeight = parseInt(getComputedStyle(terminal).minHeight) || 200;
-                terminal.style.width = `${Math.max(minWidth, startWidth + (e.clientX - startX))}px`;
-                terminal.style.height = `${Math.max(minHeight, startHeight + (e.clientY - startY))}px`;
-            }
+        document.querySelectorAll('.resize-handle').forEach((handle) => {
+            const dir = handle.dataset.dir;
+            const dx = dir.includes('e') ? 1 : dir.includes('w') ? -1 : 0;
+            const dy = dir.includes('s') ? 1 : dir.includes('n') ? -1 : 0;
 
-            function stopResize() {
-                if (isResizing) {
-                    isResizing = false;
-                    setTimeout(() => terminal.style.transition = 'all .3s ease-in-out', 50);
-                    document.removeEventListener('mousemove', resize);
-                    document.removeEventListener('mouseup', stopResize);
+            handle.addEventListener('mousedown', function(event) {
+                if (terminal.classList.contains('maximized') || isMobile()) return;
+                event.preventDefault();
+                event.stopPropagation();
+                terminalFollowsSidebar = false;
+                pinTerminalTop();
+                isResizing = true;
+                const startX = event.clientX;
+                const startY = event.clientY;
+                const startWidth = terminal.offsetWidth;
+                const startHeight = terminal.offsetHeight;
+                const startTransX = dragTranslateX;
+                const startTransY = dragTranslateY;
+                const rect = terminal.getBoundingClientRect();
+
+                terminal.style.flex = '0 0 auto';
+                terminal.style.width = `${startWidth}px`;
+                terminal.style.height = `${startHeight}px`;
+
+                function resize(e) {
+                    if (!isResizing) return;
+                    terminal.style.transition = 'none';
+
+                    if (dx !== 0) {
+                        const maxW = dx > 0 ? window.innerWidth - rect.left - RESIZE_MARGIN : rect.right - RESIZE_MARGIN;
+                        const w = Math.max(MIN_WIDTH, Math.min(maxW, startWidth + dx * (e.clientX - startX)));
+                        terminal.style.width = `${w}px`;
+                        if (dx < 0) dragTranslateX = startTransX + (startWidth - w);
+                    }
+                    if (dy !== 0) {
+                        const maxH = dy > 0 ? window.innerHeight - rect.top - RESIZE_MARGIN : rect.bottom - RESIZE_MARGIN;
+                        const h = Math.max(MIN_HEIGHT, Math.min(maxH, startHeight + dy * (e.clientY - startY)));
+                        terminal.style.height = `${h}px`;
+                        if (dy < 0) dragTranslateY = startTransY + (startHeight - h);
+                    }
+                    if (dx < 0 || dy < 0) terminal.style.transform = `translate(${dragTranslateX}px, ${dragTranslateY}px)`;
                 }
-            }
 
-            document.addEventListener('mousemove', resize);
-            document.addEventListener('mouseup', stopResize);
+                function stopResize() {
+                    if (isResizing) {
+                        isResizing = false;
+                        setTimeout(() => terminal.style.transition = 'all .3s ease-in-out', 50);
+                        document.removeEventListener('mousemove', resize);
+                        document.removeEventListener('mouseup', stopResize);
+                    }
+                }
+
+                document.addEventListener('mousemove', resize);
+                document.addEventListener('mouseup', stopResize);
+            });
+
+            handle.addEventListener('dblclick', function() {
+                resetManualTerminalLayout();
+                fitSidebar();
+                updateTerminalSize();
+            });
         });
 
         let currentScale = 1;
         const layoutWrapper = document.querySelector('.layout-wrapper');
+
+        function clampTerminalToViewport() {
+            if (!terminal || terminal.classList.contains('maximized')) return;
+            const rect = terminal.getBoundingClientRect();
+            const MARGIN = 60;
+            let dx = 0, dy = 0;
+            if (rect.right < MARGIN) dx = MARGIN - rect.right;
+            else if (rect.left > window.innerWidth - MARGIN) dx = (window.innerWidth - MARGIN) - rect.left;
+            if (rect.bottom < MARGIN) dy = MARGIN - rect.bottom;
+            else if (rect.top > window.innerHeight - MARGIN) dy = (window.innerHeight - MARGIN) - rect.top;
+            if (dx || dy) {
+                dragTranslateX += dx / currentScale;
+                dragTranslateY += dy / currentScale;
+                terminal.style.transform = `translate(${dragTranslateX}px, ${dragTranslateY}px)`;
+            }
+        }
 
         document.addEventListener('keydown', function(e) {
             if (!(e.metaKey || e.ctrlKey)) return;
@@ -1510,16 +2022,19 @@
                 e.preventDefault();
                 currentScale = Math.min(currentScale + 0.1, 1);
                 layoutWrapper.style.transform = currentScale === 1 ? '' : `scale(${currentScale})`;
+                clampTerminalToViewport();
                 setTimeout(updateTerminalSize, 200);
             } else if (e.key === '-') {
                 e.preventDefault();
                 currentScale = Math.max(currentScale - 0.1, 0.3);
                 layoutWrapper.style.transform = `scale(${currentScale})`;
+                clampTerminalToViewport();
                 setTimeout(updateTerminalSize, 200);
             } else if (e.key === '0') {
                 e.preventDefault();
                 currentScale = 1;
                 layoutWrapper.style.transform = '';
+                clampTerminalToViewport();
                 setTimeout(updateTerminalSize, 200);
             }
         });
@@ -1533,6 +2048,7 @@
                     currentScale = Math.max(currentScale - 0.05, 0.3);
                 }
                 layoutWrapper.style.transform = currentScale === 1 ? '' : `scale(${currentScale})`;
+                clampTerminalToViewport();
                 setTimeout(updateTerminalSize, 200);
             }
         }, { passive: false });
